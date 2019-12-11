@@ -1,5 +1,7 @@
 import chess.ChessController;
 import chess.ChessView;
+import chess.PieceType;
+import chess.PlayerColor;
 import chess.views.gui.GUIView;
 import engine.Game;
 
