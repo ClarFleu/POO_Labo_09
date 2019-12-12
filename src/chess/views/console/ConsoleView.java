@@ -164,6 +164,7 @@ public class ConsoleView extends BaseView<String> {
         printBoard();
       }
     }
+    System.out.println("Yeah");
   }
 
 }
