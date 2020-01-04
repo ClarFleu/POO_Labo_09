@@ -3,18 +3,18 @@ package engine.board;
 import chess.PieceType;
 import chess.PlayerColor;
 
+import static java.lang.Math.abs;
+
 public class Bishop extends Piece {
-    public Bishop(PlayerColor color) {
-        this.color = color;
+    public Bishop(PlayerColor color){
+        super(color);
     }
 
-    @Override
-    public int[][] getMoves() {
-        return new int[0][];
-    }
 
     @Override
-    public PieceType getType() {
-        return PieceType.BISHOP;
+    public boolean isAValidMove(Square from, Square to) {
+        if(abs(from.getX() - to.getX()) == abs(from.getY() - to.getY()))
+            return true;
+        else return false;
     }
 }

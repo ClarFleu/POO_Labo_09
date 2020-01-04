@@ -4,17 +4,19 @@ import chess.PieceType;
 import chess.PlayerColor;
 
 public class Queen extends Piece {
-    public Queen(PlayerColor color) {
-        this.color = color;
+    private Piece move_rook;
+    private Piece move_bishop;
+
+    public Queen(PlayerColor color){
+        super(color);
+        move_rook = new Rook(color);
+        move_bishop = new Bishop(color);
+
     }
 
-    @Override
-    public int[][] getMoves() {
-        return new int[0][];
-    }
 
     @Override
-    public PieceType getType() {
-        return PieceType.QUEEN;
+    public boolean isAValidMove(Square from, Square to) {
+        return check_bounds(to) && (move_rook.isAValidMove(from, to) || move_bishop.isAValidMove(from, to));
     }
 }

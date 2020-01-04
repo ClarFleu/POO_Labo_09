@@ -1,49 +1,77 @@
 package engine.board;
 
-import chess.PieceType;
 import chess.PlayerColor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Board {
-    final int MAXSIZE = 8;
-    private Piece[][] board;
+    private Square[][] squares;
+    private List<Piece> pieces;
 
-    public Board() {
-        board = new Piece[MAXSIZE][MAXSIZE];
-        /* White pieces */
-        board[0][0] = new Rook(PlayerColor.WHITE);
-        board[1][0] = new Knight(PlayerColor.WHITE);
-        board[2][0] = new Bishop(PlayerColor.WHITE);
-        board[3][0] = new Queen(PlayerColor.WHITE);
-        board[4][0] = new King(PlayerColor.WHITE);
-        board[5][0] = new Bishop(PlayerColor.WHITE);
-        board[6][0] = new Knight(PlayerColor.WHITE);
-        board[7][0] = new Rook(PlayerColor.WHITE);
-        for (int column = 0; column < MAXSIZE; column++)
-            board[column][1] = new Pawn(PlayerColor.WHITE);
-
-        /* Black pieces */
-        board[0][7] = new Rook(PlayerColor.BLACK);
-        board[1][7] = new Knight(PlayerColor.BLACK);
-        board[2][7] = new Bishop(PlayerColor.BLACK);
-        board[3][7] = new Queen(PlayerColor.BLACK);
-        board[4][7] = new King(PlayerColor.BLACK);
-        board[5][7] = new Bishop(PlayerColor.BLACK);
-        board[6][7] = new Knight(PlayerColor.BLACK);
-        board[7][7] = new Rook(PlayerColor.BLACK);
-        for (int column = 0; column < MAXSIZE; column++)
-            board[column][6] = new Pawn(PlayerColor.BLACK);
+    public Board(){
+        squares = new Square[8][8];
+        for(int i = 0; i < 8; i++){
+            for(int j = 0; j < 8; j++){
+                squares[i][j] = new Square(i, j);
+            }
+        }
+        pieces = new ArrayList<Piece>();
+        initialize();
     }
 
-    public Piece getPiece(int x, int y) {
-        return board[x][y];
+    public Square[][] getSquares() {
+        return squares;
+    }
+    public void deletePiece(Piece piece){
+        pieces.remove(piece);
+        return;
     }
 
-    public boolean legalMove(int fromX, int fromY, int toX, int toY) {
-        return true;
+    public void movePiece(Piece piece, Square from, Square to){
+
     }
 
-    public void move(int fromX, int fromY, int toX, int toY) {
-        board[toX][toY] = board[fromX][fromY];
-        board[fromX][fromY] = null;
+    void initialize(){
+        pieces.add(new Rook(PlayerColor.WHITE));
+        squares[0][0].setPiecePosition(pieces.get(0));
+        pieces.add(new Knight(PlayerColor.WHITE));
+        squares[1][0].setPiecePosition(pieces.get(1));
+        pieces.add(new Bishop(PlayerColor.WHITE));
+        squares[2][0].setPiecePosition(pieces.get(2));
+        pieces.add(new King(PlayerColor.WHITE));
+        squares[3][0].setPiecePosition(pieces.get(3));
+        pieces.add(new Queen(PlayerColor.WHITE));
+        squares[4][0].setPiecePosition(pieces.get(4));
+        pieces.add(new Bishop(PlayerColor.WHITE));
+        squares[5][0].setPiecePosition(pieces.get(5));
+        pieces.add(new Knight(PlayerColor.WHITE));
+        squares[6][0].setPiecePosition(pieces.get(6));
+        pieces.add(new Rook(PlayerColor.WHITE));
+        squares[7][0].setPiecePosition(pieces.get(7));
+
+        for (int i = 0; i < 8; i++) {
+            pieces.add(new Pawn(PlayerColor.WHITE));
+            squares[i][1].setPiecePosition(pieces.get(8+i));
+            pieces.add(new Pawn(PlayerColor.BLACK));
+            squares[i][1].setPiecePosition(pieces.get(16+i));
+        }
+
+        pieces.add(new Rook(PlayerColor.BLACK));
+        squares[0][7].setPiecePosition(pieces.get(24));
+        pieces.add(new Knight(PlayerColor.BLACK));
+        squares[1][7].setPiecePosition(pieces.get(25));
+        pieces.add(new Bishop(PlayerColor.BLACK));
+        squares[2][7].setPiecePosition(pieces.get(26));
+        pieces.add(new King(PlayerColor.BLACK));
+        squares[3][7].setPiecePosition(pieces.get(27));
+        pieces.add(new Queen(PlayerColor.BLACK));
+        squares[4][7].setPiecePosition(pieces.get(28));
+        pieces.add(new Bishop(PlayerColor.BLACK));
+        squares[5][7].setPiecePosition(pieces.get(29));
+        pieces.add(new Knight(PlayerColor.BLACK));
+        squares[6][7].setPiecePosition(pieces.get(30));
+        pieces.add(new Rook(PlayerColor.BLACK));
+        squares[7][7].setPiecePosition(pieces.get(31));
     }
 }
