@@ -10,11 +10,8 @@ public class Bishop extends Piece {
         super(color);
     }
 
-
     @Override
     public boolean isAValidMove(Square from, Square to) {
-        if(abs(from.getX() - to.getX()) == abs(from.getY() - to.getY()))
-            return true;
-        else return false;
+        return (abs(from.getX() - to.getX()) == abs(from.getY() - to.getY()));
     }
 }

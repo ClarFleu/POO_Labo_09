@@ -1,6 +1,5 @@
 package engine.board;
 
-import chess.PieceType;
 import chess.PlayerColor;
 
 public abstract class Piece implements Movement {

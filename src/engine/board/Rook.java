@@ -1,6 +1,5 @@
 package engine.board;
 
-import chess.PieceType;
 import chess.PlayerColor;
 
 public class Rook extends Piece {
@@ -9,11 +8,8 @@ public class Rook extends Piece {
         super(color);
     }
 
-
     @Override
     public boolean isAValidMove(Square from, Square to) {
-        if((check_bounds(to) && (from.getX() == to.getX())||(from.getY() == to.getY()))){
-            return true;
-        }else return false;
+        return ((check_bounds(to) && (from.getX() == to.getX())||(from.getY() == to.getY())));
     }
 }

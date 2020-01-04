@@ -3,11 +3,11 @@ package engine;
 import chess.PlayerColor;
 
 public class Player {
-    PlayerColor teamColor;
+    PlayerColor color;
     boolean turn;
 
     public Player(PlayerColor teamColor, boolean turn){
-        this.teamColor = teamColor;
+        this.color = teamColor;
         this.turn = turn;
     }
 
@@ -15,8 +15,9 @@ public class Player {
      *Retourne la couleur du joueur
      */
     PlayerColor getPlayerColor(){
-        return teamColor;
+        return color;
     }
+
     /**
      * Active ou desactive le tour du joueur courant
      */
