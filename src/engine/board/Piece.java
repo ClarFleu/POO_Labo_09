@@ -1,5 +1,6 @@
 package engine.board;
 
+import chess.PieceType;
 import chess.PlayerColor;
 
 public abstract class Piece implements Movement {
@@ -26,5 +27,11 @@ public abstract class Piece implements Movement {
     public boolean check_bounds(Square square){
         return (square.getX() < 8) && (square.getY() < 8);
     }
+
+    /**
+     * Get the type of the current Piece
+     * @return type (PieceType)
+     */
+    public abstract PieceType getType();
 
 }

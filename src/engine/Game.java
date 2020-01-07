@@ -12,7 +12,6 @@ public class Game implements ChessController {
     private Player player1, player2;
 
     public Game() {
-        board = new Board();
         player1 = new Player(PlayerColor.WHITE, true);
         player2 = new Player(PlayerColor.BLACK, false);
     }
@@ -21,7 +20,8 @@ public class Game implements ChessController {
     public void start(ChessView view) {
         //toute la logique doit y être présente y compris les appels a move et a new game();
         // ne pas oublier qu'on peut demander tt un tas de trucs grâce à la vue à l'user!!
-
+        board = new Board();
+        initView(view);
     }
 
     @Override
@@ -34,7 +34,16 @@ public class Game implements ChessController {
 
     @Override
     public void newGame() {
+        board = new Board();
+    }
 
+    private void initView(ChessView view) {
+        for (Piece piece : board.getPieces()) {
+            int x = board.getPosition(piece)[0];
+            int y = board.getPosition(piece)[1];
+            if(x >= 0)
+                view.putPiece(piece.getType(), piece.getColor(), x, y);
+        }
     }
 
 }

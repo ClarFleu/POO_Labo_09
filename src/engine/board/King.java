@@ -1,5 +1,6 @@
 package engine.board;
 
+import chess.PieceType;
 import chess.PlayerColor;
 
 import static java.lang.Math.pow;
@@ -16,4 +17,10 @@ public class King extends Piece {
         double y =  pow((double)(from.getY() - to.getY()) , 2);
         return ((sqrt(x + y) == 1) && check_bounds(to));
     }
+
+    @Override
+    public PieceType getType() {
+        return PieceType.KING;
+    }
+
 }

@@ -14,4 +14,9 @@ public class Bishop extends Piece {
     public boolean isAValidMove(Square from, Square to) {
         return (abs(from.getX() - to.getX()) == abs(from.getY() - to.getY()));
     }
+
+    @Override
+    public PieceType getType() {
+        return PieceType.BISHOP;
+    }
 }

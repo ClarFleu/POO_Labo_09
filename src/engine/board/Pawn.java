@@ -1,5 +1,6 @@
 package engine.board;
 
+import chess.PieceType;
 import chess.PlayerColor;
 
 public class Pawn extends Piece {
@@ -39,6 +40,11 @@ public class Pawn extends Piece {
             }
             else return false;
         }
+    }
+
+    @Override
+    public PieceType getType() {
+        return PieceType.PAWN;
     }
 
 }
