@@ -18,6 +18,19 @@ public class Game implements ChessController {
         board = new Board();
     }
 
+    private boolean turnChange(Piece piece) {
+        if (player1.isTurn()) {
+            if (piece.getColor() != player1.getPlayerColor())
+                return false;
+        } else {
+            if (piece.getColor() == player1.getPlayerColor())
+                return false;
+        }
+        player1.changeTurn();
+        player2.changeTurn();
+        return true;
+    }
+
     @Override
     public void start(ChessView view) {
         //TODO toute la logique doit y être présente y compris les appels a move et a new game();
@@ -29,26 +42,15 @@ public class Game implements ChessController {
     @Override
     public boolean move(int fromX, int fromY, int toX, int toY) {
         Piece from = board.getSquares()[fromX][fromY].getPiece();
-
         if (from == null)
             return false;
 
-        if (player1.isTurn()) {
-            if (from.getColor() != player1.getPlayerColor())
-                return false;
-        } else {
-            if (from.getColor() == player1.getPlayerColor())
-                return false;
-        }
-        player1.changeTurn();
-        player2.changeTurn();
-
-        if (from.isAValidMove(board.getSquares()[fromX][fromY], board.getSquares()[toX][toY])) {
-            board.movePiece(from, board.getSquares()[fromX][fromY], board.getSquares()[toX][toY]);
+        if (turnChange(from) && board.isValid(fromX, fromY, toX, toY)) {
             view.removePiece(fromX, fromY);
             view.putPiece(from.getType(), from.getColor(), toX, toY);
             return true;
         }
+        turnChange(from);
         return false;
     }
 

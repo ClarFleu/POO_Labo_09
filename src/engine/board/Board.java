@@ -20,6 +20,20 @@ public class Board {
         initialize();
     }
 
+    public boolean isValid(int fromX, int fromY, int toX, int toY) {
+        Square sFrom = squares[fromX][fromY],
+               sTo = squares[toX][toY];
+        Piece from = sFrom.getPiece();
+        if (from == null)
+            return false;
+
+        if(/*TODO tester si le mouvement est valide pour mouvements spéciaux true || */from.isAValidMove(sFrom, sTo)) {
+            movePiece(from, sFrom, sTo);
+            return true;
+        }
+        return false;
+    }
+
     public Square[][] getSquares() {
         return squares;
     }
@@ -36,8 +50,9 @@ public class Board {
         pieces.remove(piece);
     }
 
-    public void movePiece(Piece piece, Square from, Square to){
-        //TODO change rune piece de position
+    private void movePiece(Piece piece, Square from, Square to){
+        to.piece = piece;
+        from.piece = null;
     }
 
     void initialize(){
