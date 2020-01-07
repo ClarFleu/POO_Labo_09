@@ -50,7 +50,8 @@ public class Game implements ChessController {
             view.putPiece(from.getType(), from.getColor(), toX, toY);
             return true;
         }
-        turnChange(from);
+        player1.changeTurn();
+        player2.changeTurn();
         return false;
     }
 
