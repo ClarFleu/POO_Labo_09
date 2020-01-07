@@ -15,7 +15,7 @@ public class King extends Piece {
     public boolean isAValidMove(Square from, Square to) {
         double x = pow((double)(from.getX() - to.getX()) , 2);
         double y =  pow((double)(from.getY() - to.getY()) , 2);
-        return ((sqrt(x + y) == 1) && check_bounds(to));
+        return (((sqrt(x + y) == 1)||sqrt(x + y) == sqrt(2)) && check_bounds(to));
     }
 
     @Override
