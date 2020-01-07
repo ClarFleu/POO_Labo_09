@@ -15,13 +15,13 @@ public class Game implements ChessController {
     public Game() {
         player1 = new Player(PlayerColor.WHITE, true);
         player2 = new Player(PlayerColor.BLACK, false);
+        board = new Board();
     }
 
     @Override
     public void start(ChessView view) {
         //TODO toute la logique doit y être présente y compris les appels a move et a new game();
         // ne pas oublier qu'on peut demander tt un tas de trucs grâce à la vue à l'user!!
-        board = new Board();
         this.view = view;
         initView();
     }
@@ -29,6 +29,9 @@ public class Game implements ChessController {
     @Override
     public boolean move(int fromX, int fromY, int toX, int toY) {
         Piece from = board.getSquares()[fromX][fromY].getPiece();
+
+        if (from == null)
+            return false;
 
         if (player1.isTurn()) {
             if (from.getColor() != player1.getPlayerColor())
@@ -40,8 +43,8 @@ public class Game implements ChessController {
         player1.changeTurn();
         player2.changeTurn();
 
-        if (from.isAValidMove(board.getSquares()[fromX][fromY], board.getSquares()[toX][toY]) || true) {
-            //board.movePiece(from, board.getSquares()[fromX][fromY], board.getSquares()[toX][toY]);
+        if (from.isAValidMove(board.getSquares()[fromX][fromY], board.getSquares()[toX][toY])) {
+            board.movePiece(from, board.getSquares()[fromX][fromY], board.getSquares()[toX][toY]);
             view.removePiece(fromX, fromY);
             view.putPiece(from.getType(), from.getColor(), toX, toY);
             return true;
@@ -52,6 +55,7 @@ public class Game implements ChessController {
     @Override
     public void newGame() {
         //TODO gérer la création d'un nouveau jeu
+        board = new Board();
     }
 
     private void initView() {
