@@ -34,11 +34,10 @@ public class Board {
 
     public void deletePiece(Piece piece){
         pieces.remove(piece);
-        return;
     }
 
     public void movePiece(Piece piece, Square from, Square to){
-
+        //TODO change rune piece de position
     }
 
     void initialize(){

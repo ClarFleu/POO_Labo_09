@@ -18,7 +18,7 @@ public class Game implements ChessController {
 
     @Override
     public void start(ChessView view) {
-        //toute la logique doit y être présente y compris les appels a move et a new game();
+        //TODO toute la logique doit y être présente y compris les appels a move et a new game();
         // ne pas oublier qu'on peut demander tt un tas de trucs grâce à la vue à l'user!!
         board = new Board();
         initView(view);
@@ -26,15 +26,20 @@ public class Game implements ChessController {
 
     @Override
     public boolean move(int fromX, int fromY, int toX, int toY) {
-        Square[][] squares = board.getSquares();
-        Piece currentPiece = squares[fromX][fromY].getPiece();
+        Piece from = board.getSquares()[fromX][fromY].getPiece();
+
+        if (from.isAValidMove(board.getSquares()[fromX][fromY], board.getSquares()[toX][toY])) {
+            //TODO faire le mouvement
+
+            return true;
+        }
 
         return false;
     }
 
     @Override
     public void newGame() {
-        board = new Board();
+        //TODO gérer la création d'un nouveau jeu
     }
 
     private void initView(ChessView view) {
@@ -45,5 +50,4 @@ public class Game implements ChessController {
                 view.putPiece(piece.getType(), piece.getColor(), x, y);
         }
     }
-
 }

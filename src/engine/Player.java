@@ -3,8 +3,8 @@ package engine;
 import chess.PlayerColor;
 
 public class Player {
-    PlayerColor color;
-    boolean turn;
+    private PlayerColor color;
+    private boolean turn;
 
     public Player(PlayerColor teamColor, boolean turn){
         this.color = teamColor;
