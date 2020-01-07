@@ -10,6 +10,7 @@ import engine.board.Square;
 public class Game implements ChessController {
     private Board board;
     private Player player1, player2;
+    private ChessView view;
 
     public Game() {
         player1 = new Player(PlayerColor.WHITE, true);
@@ -21,19 +22,30 @@ public class Game implements ChessController {
         //TODO toute la logique doit y être présente y compris les appels a move et a new game();
         // ne pas oublier qu'on peut demander tt un tas de trucs grâce à la vue à l'user!!
         board = new Board();
-        initView(view);
+        this.view = view;
+        initView();
     }
 
     @Override
     public boolean move(int fromX, int fromY, int toX, int toY) {
         Piece from = board.getSquares()[fromX][fromY].getPiece();
 
-        if (from.isAValidMove(board.getSquares()[fromX][fromY], board.getSquares()[toX][toY])) {
-            //TODO faire le mouvement
+        if (player1.isTurn()) {
+            if (from.getColor() != player1.getPlayerColor())
+                return false;
+        } else {
+            if (from.getColor() == player1.getPlayerColor())
+                return false;
+        }
+        player1.changeTurn();
+        player2.changeTurn();
 
+        if (from.isAValidMove(board.getSquares()[fromX][fromY], board.getSquares()[toX][toY]) || true) {
+            //board.movePiece(from, board.getSquares()[fromX][fromY], board.getSquares()[toX][toY]);
+            view.removePiece(fromX, fromY);
+            view.putPiece(from.getType(), from.getColor(), toX, toY);
             return true;
         }
-
         return false;
     }
 
@@ -42,7 +54,7 @@ public class Game implements ChessController {
         //TODO gérer la création d'un nouveau jeu
     }
 
-    private void initView(ChessView view) {
+    private void initView() {
         for (Piece piece : board.getPieces()) {
             int x = board.getPosition(piece)[0];
             int y = board.getPosition(piece)[1];

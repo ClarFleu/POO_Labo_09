@@ -44,8 +44,8 @@ public class Board {
         pieces.add(new Rook(PlayerColor.WHITE));
         pieces.add(new Knight(PlayerColor.WHITE));
         pieces.add(new Bishop(PlayerColor.WHITE));
-        pieces.add(new King(PlayerColor.WHITE));
         pieces.add(new Queen(PlayerColor.WHITE));
+        pieces.add(new King(PlayerColor.WHITE));
         pieces.add(new Bishop(PlayerColor.WHITE));
         pieces.add(new Knight(PlayerColor.WHITE));
         pieces.add(new Rook(PlayerColor.WHITE));
@@ -66,8 +66,8 @@ public class Board {
         pieces.add(new Rook(PlayerColor.BLACK));
         pieces.add(new Knight(PlayerColor.BLACK));
         pieces.add(new Bishop(PlayerColor.BLACK));
-        pieces.add(new King(PlayerColor.BLACK));
         pieces.add(new Queen(PlayerColor.BLACK));
+        pieces.add(new King(PlayerColor.BLACK));
         pieces.add(new Bishop(PlayerColor.BLACK));
         pieces.add(new Knight(PlayerColor.BLACK));
         pieces.add(new Rook(PlayerColor.BLACK));
