@@ -43,7 +43,11 @@ public class Game implements ChessController {
             return false;
 
         if (turnChange(from)) {
-            if (board.isValid(fromX, fromY, toX, toY)) {
+            int[] passPos = board.isEnPassant(fromX, fromY, toX, toY);
+
+            if(passPos[0] >= 0 && passPos[1] >= 0) {
+                view.removePiece(passPos[0], passPos[1]);
+            } else if (board.isValid(fromX, fromY, toX, toY)) {
                 view.removePiece(fromX, fromY);
                 view.putPiece(from.getType(), from.getColor(), toX, toY);
                 return true;

@@ -1,9 +1,12 @@
 package engine.board;
 
+import chess.PieceType;
 import chess.PlayerColor;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.Math.abs;
 
 public class Board {
     private Square[][] squares;
@@ -29,18 +32,18 @@ public class Board {
         pieces.add(new Bishop(PlayerColor.WHITE));
         pieces.add(new Knight(PlayerColor.WHITE));
         pieces.add(new Rook(PlayerColor.WHITE));
-        squares[0][0].setPiecePosition(pieces.get(0));
-        squares[1][0].setPiecePosition(pieces.get(1));
-        squares[2][0].setPiecePosition(pieces.get(2));
-        squares[3][0].setPiecePosition(pieces.get(3));
-        squares[4][0].setPiecePosition(pieces.get(4));
-        squares[5][0].setPiecePosition(pieces.get(5));
-        squares[6][0].setPiecePosition(pieces.get(6));
-        squares[7][0].setPiecePosition(pieces.get(7));
+        squares[0][0].setPiece(pieces.get(0));
+        squares[1][0].setPiece(pieces.get(1));
+        squares[2][0].setPiece(pieces.get(2));
+        squares[3][0].setPiece(pieces.get(3));
+        squares[4][0].setPiece(pieces.get(4));
+        squares[5][0].setPiece(pieces.get(5));
+        squares[6][0].setPiece(pieces.get(6));
+        squares[7][0].setPiece(pieces.get(7));
 
         for (int i = 0; i < 8; i++) {
             pieces.add(new Pawn(PlayerColor.WHITE));
-            squares[i][1].setPiecePosition(pieces.get(8+i));
+            squares[i][1].setPiece(pieces.get(8+i));
         }
 
         pieces.add(new Rook(PlayerColor.BLACK));
@@ -51,18 +54,18 @@ public class Board {
         pieces.add(new Bishop(PlayerColor.BLACK));
         pieces.add(new Knight(PlayerColor.BLACK));
         pieces.add(new Rook(PlayerColor.BLACK));
-        squares[0][7].setPiecePosition(pieces.get(16));
-        squares[1][7].setPiecePosition(pieces.get(17));
-        squares[2][7].setPiecePosition(pieces.get(18));
-        squares[3][7].setPiecePosition(pieces.get(19));
-        squares[4][7].setPiecePosition(pieces.get(20));
-        squares[5][7].setPiecePosition(pieces.get(21));
-        squares[6][7].setPiecePosition(pieces.get(22));
-        squares[7][7].setPiecePosition(pieces.get(23));
+        squares[0][7].setPiece(pieces.get(16));
+        squares[1][7].setPiece(pieces.get(17));
+        squares[2][7].setPiece(pieces.get(18));
+        squares[3][7].setPiece(pieces.get(19));
+        squares[4][7].setPiece(pieces.get(20));
+        squares[5][7].setPiece(pieces.get(21));
+        squares[6][7].setPiece(pieces.get(22));
+        squares[7][7].setPiece(pieces.get(23));
 
         for (int i = 0; i < 8; i++) {
             pieces.add(new Pawn(PlayerColor.BLACK));
-            squares[i][6].setPiecePosition(pieces.get(24+i));
+            squares[i][6].setPiece(pieces.get(24+i));
         }
     }
 
@@ -73,6 +76,7 @@ public class Board {
         if (from == null)
             return false;
 
+        System.out.println("yeah");
         if(isSpecialMove(sFrom, sTo) || from.isAValidMove(sFrom, sTo)) {
             movePiece(from, sFrom, sTo);
             return true;
@@ -84,9 +88,9 @@ public class Board {
      * Special moves *
      *****************/
     public boolean isSpecialMove(Square from, Square to) {
+        Piece piece = from.getPiece();
         return (isSmallR(from, to)      ||
                 isBigR(from, to)        ||
-                isEnPassant(from, to)   ||
                 isPwanEating(from, to));
     }
 
@@ -100,9 +104,28 @@ public class Board {
         return false;
     }
 
-    public boolean isEnPassant(Square from, Square to) {
-        Piece piece = from.getPiece();
-        return false;
+    public int[] isEnPassant(int fromX, int fromY, int toX, int toY) {
+        Square from = squares[fromX][fromY],
+               to = squares[toX][toY];
+        int[] prayPos = new int[2];
+
+        if(squares[to.getX()][from.getY()].getPiece() != null   &&
+            from.getPiece().getType() == PieceType.PAWN         &&
+            isDiagonalOneMove(from, to)                         ) {
+            pieces.remove(squares[to.getX()][from.getY()].getPiece());
+            prayPos[0] = to.getX();
+            prayPos[1] = to.getY();
+        } else {
+            prayPos[0] = -1;
+            prayPos[1] = -1;
+        }
+        return prayPos;
+    }
+
+    private boolean isDiagonalOneMove(Square from, Square to) {
+        if(to.getY() < 0 || to.getX() < 0 || to.getY() >= squares.length || to.getX() >= squares.length)
+            return false;
+        return (abs(from.getY() - to.getY()) == 1 && abs(from.getX() - to.getX()) == 1);
     }
 
     public boolean isPwanEating(Square from, Square to) {
@@ -129,9 +152,9 @@ public class Board {
         int[] pos = new int[2];
         for (int i = 0; i < squares.length; i++) {
             for (int j = 0; j < squares[0].length; j++) {
-                pos[0] = squares[i][j].x;
-                pos[1] = squares[i][j].y;
-                if (squares[i][j].piece == piece)
+                pos[0] = squares[i][j].getX();
+                pos[1] = squares[i][j].getY();
+                if (squares[i][j].getPiece() == piece)
                     return pos;
             }
         }
@@ -143,13 +166,11 @@ public class Board {
     /*******************
      * Private methods *
      *******************/
-    private void deletePiece(Piece piece){
-        pieces.remove(piece);
-    }
-
-    private void movePiece(Piece piece, Square from, Square to){
-        to.piece = piece;
-        from.piece = null;
+    private void movePiece(Piece piece, Square from, Square to) {
+        if(to.getPiece() != null)
+            pieces.remove(piece);
+        to.setPiece(piece);
+        from.setPiece(null);
     }
 
 }

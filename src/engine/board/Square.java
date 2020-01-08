@@ -38,11 +38,8 @@ public class Square {
     /**
      * Place the piece in the current square
      */
-    public void setPiecePosition(Piece piece){
-        if (isEmpty()) {
-            this.piece = piece;
-        }
-        else throw new RuntimeException("you can't place two pieces here");
+    public void setPiece(Piece piece){
+        this.piece = piece;
     }
 
 }
