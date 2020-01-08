@@ -5,7 +5,6 @@ import chess.ChessView;
 import chess.PlayerColor;
 import engine.board.Board;
 import engine.board.Piece;
-import engine.board.Square;
 
 public class Game implements ChessController {
     private Board board;
@@ -33,8 +32,6 @@ public class Game implements ChessController {
 
     @Override
     public void start(ChessView view) {
-        //TODO toute la logique doit y être présente y compris les appels a move et a new game();
-        // ne pas oublier qu'on peut demander tt un tas de trucs grâce à la vue à l'user!!
         this.view = view;
         initView();
     }
@@ -45,20 +42,27 @@ public class Game implements ChessController {
         if (from == null)
             return false;
 
-        if (turnChange(from) && board.isValid(fromX, fromY, toX, toY)) {
-            view.removePiece(fromX, fromY);
-            view.putPiece(from.getType(), from.getColor(), toX, toY);
-            return true;
+        if (turnChange(from)) {
+            if (board.isValid(fromX, fromY, toX, toY)) {
+                view.removePiece(fromX, fromY);
+                view.putPiece(from.getType(), from.getColor(), toX, toY);
+                return true;
+            }
+            player1.changeTurn();
+            player2.changeTurn();
         }
-        player1.changeTurn();
-        player2.changeTurn();
         return false;
     }
 
     @Override
     public void newGame() {
-        //TODO gérer la création d'un nouveau jeu
         board = new Board();
+        if (player2.isTurn()) {
+            player2.changeTurn();
+            player1.changeTurn();
+        }
+
+        this.start(view);
     }
 
     private void initView() {

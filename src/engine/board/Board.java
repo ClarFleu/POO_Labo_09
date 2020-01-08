@@ -17,45 +17,10 @@ public class Board {
             }
         }
         pieces = new ArrayList<Piece>();
-        initialize();
+        init();
     }
 
-    public boolean isValid(int fromX, int fromY, int toX, int toY) {
-        Square sFrom = squares[fromX][fromY],
-               sTo = squares[toX][toY];
-        Piece from = sFrom.getPiece();
-        if (from == null)
-            return false;
-
-        if(/*TODO tester si le mouvement est valide pour mouvements spéciaux true || */from.isAValidMove(sFrom, sTo)) {
-            movePiece(from, sFrom, sTo);
-            return true;
-        }
-        return false;
-    }
-
-    public Square[][] getSquares() {
-        return squares;
-    }
-
-    public Piece[] getPieces() {
-        Piece[] pieceTab = new Piece[pieces.size()];
-        int idx = 0;
-        for (Piece piece : pieces)
-            pieceTab[idx++] = piece;
-        return pieceTab;
-    }
-
-    public void deletePiece(Piece piece){
-        pieces.remove(piece);
-    }
-
-    private void movePiece(Piece piece, Square from, Square to){
-        to.piece = piece;
-        from.piece = null;
-    }
-
-    void initialize(){
+    void init(){
         pieces.add(new Rook(PlayerColor.WHITE));
         pieces.add(new Knight(PlayerColor.WHITE));
         pieces.add(new Bishop(PlayerColor.WHITE));
@@ -101,6 +66,65 @@ public class Board {
         }
     }
 
+    public boolean isValid(int fromX, int fromY, int toX, int toY) {
+        Square sFrom = squares[fromX][fromY],
+               sTo = squares[toX][toY];
+        Piece from = sFrom.getPiece();
+        if (from == null)
+            return false;
+
+        if(isSpecialMove(sFrom, sTo) || from.isAValidMove(sFrom, sTo)) {
+            movePiece(from, sFrom, sTo);
+            return true;
+        }
+        return false;
+    }
+
+    /*****************
+     * Special moves *
+     *****************/
+    public boolean isSpecialMove(Square from, Square to) {
+        return (isSmallR(from, to)      ||
+                isBigR(from, to)        ||
+                isEnPassant(from, to)   ||
+                isPwanEating(from, to));
+    }
+
+    public boolean isSmallR(Square from, Square to) {
+        Piece piece = from.getPiece();
+        return false;
+    }
+
+    public boolean isBigR(Square from, Square to) {
+        Piece piece = from.getPiece();
+        return false;
+    }
+
+    public boolean isEnPassant(Square from, Square to) {
+        Piece piece = from.getPiece();
+        return false;
+    }
+
+    public boolean isPwanEating(Square from, Square to) {
+        Piece piece = from.getPiece();
+        return false;
+    }
+
+    /***********
+     * Getters *
+     ***********/
+    public Square[][] getSquares() {
+        return squares;
+    }
+
+    public Piece[] getPieces() {
+        Piece[] pieceTab = new Piece[pieces.size()];
+        int idx = 0;
+        for (Piece piece : pieces)
+            pieceTab[idx++] = piece;
+        return pieceTab;
+    }
+
     public int[] getPosition(Piece piece) {
         int[] pos = new int[2];
         for (int i = 0; i < squares.length; i++) {
@@ -115,4 +139,17 @@ public class Board {
         pos[1] = -1;
         return pos;
     }
+
+    /*******************
+     * Private methods *
+     *******************/
+    private void deletePiece(Piece piece){
+        pieces.remove(piece);
+    }
+
+    private void movePiece(Piece piece, Square from, Square to){
+        to.piece = piece;
+        from.piece = null;
+    }
+
 }
