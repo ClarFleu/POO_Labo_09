@@ -21,12 +21,6 @@ public abstract class Piece implements Movement {
      */
     public abstract boolean isAValidMove(Square from, Square to);
 
-    /**
-     * Check if the square that we intend to go to is in the board bounds
-     */
-    public boolean check_bounds(Square square){
-        return (square.getX() < 8) && (square.getY() < 8);
-    }
 
     /**
      * Get the type of the current Piece

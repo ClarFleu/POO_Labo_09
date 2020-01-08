@@ -3,7 +3,7 @@ package engine.board;
 import chess.PieceType;
 import chess.PlayerColor;
 
-public class Rook extends Piece {
+public class Rook extends Piece implements LinearMovement {
 
     public Rook(PlayerColor color){
         super(color);
@@ -11,7 +11,7 @@ public class Rook extends Piece {
 
     @Override
     public boolean isAValidMove(Square from, Square to) {
-        return ((check_bounds(to) && (from.getX() == to.getX())||(from.getY() == to.getY())));
+        return isLinearMove(from, to);
     }
 
     @Override
