@@ -30,6 +30,7 @@ public abstract class Piece implements Movement {
         ++nbrMoves;
     }
 
+
     /**
      * Get the type of the current Piece
      * @return type (PieceType)

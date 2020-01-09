@@ -7,6 +7,10 @@ public interface DiagonalMovement extends Movement {
      * Check if the move intended by the player is diagonal
      */
     public default boolean isDiagonalMove(Square from, Square to) {
-        return (check_bounds(to) && abs(from.getX() - to.getX()) == abs(from.getY() - to.getY()));
+        int moveX = abs(from.getX() - to.getX());
+        int moveY = abs(from.getY() - to.getY());
+        if(moveX > 0 && moveY > 0)
+            return (check_bounds(to) && moveX == moveY);
+        else return false;
     }
 }

@@ -13,7 +13,9 @@ public class Knight extends Piece {
 
     @Override
     public boolean isAValidMove(Square from, Square to) {
-        return (check_bounds(to) && (abs(from.getX() - to.getX()) + abs(from.getY() - to.getY()) == 3));
+       int moveX = abs(from.getX() - to.getX());
+       int moveY = abs(from.getY() - to.getY());
+       return (((moveX == 1) && (moveY == 2)) || ((moveX == 2) && (moveY == 1))) && check_bounds(to);
     }
 
     @Override

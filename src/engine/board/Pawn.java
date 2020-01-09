@@ -19,7 +19,8 @@ public class Pawn extends Piece {
             return promotedTo;
         }
         else return null;
-    }
+        }
+
 
     @Override
     public boolean isAValidMove(Square from, Square to) {
