@@ -25,8 +25,8 @@ public class Board {
 
     public boolean isValid(int fromX, int fromY, int toX, int toY) {
         Square sFrom = squares[fromX][fromY],
-               sTo = squares[toX][toY];
-        Piece from = sFrom.getPiece();
+               sTo   = squares[toX][toY];
+        Piece from   = sFrom.getPiece();
 
         if (from != null && validMove(sFrom, sTo)) {
             if(sTo.getPiece() != null && sFrom.getPiece().getColor() == sTo.getPiece().getColor())
@@ -47,8 +47,10 @@ public class Board {
             from.getPiece().getType() == PieceType.PAWN                             &&
             squares[to.getX()][from.getY()].getPiece().getNbrMoves() == 1           &&
             longStep(squares[to.getX()][from.getY()])                               &&
-            isDiagonalOneMove(from, to)                                             ) {
+            isDiagonalOnePawnMove(from, to)                                             ) {
             pieces.remove(squares[to.getX()][from.getY()].getPiece());
+            to.setPiece(from.getPiece());
+            from.setPiece(null);
             prayPos[0] = to.getX();
             prayPos[1] = from.getY();
         } else {
@@ -138,8 +140,12 @@ public class Board {
     }
 
     private void movePiece(Piece piece, Square from, @NotNull Square to) {
+        System.out.println(piece.getType() + " " + piece.getColor() + "\n moved from (" + from.getX() + ", " + from.getY() + ") to (" + to.getX() + ", " + to.getY() + ")");
         if(to.getPiece() != null)
-            pieces.remove(piece);
+            System.out.println("and ate " + to.getPiece().getType() + " " + to.getPiece().getColor());
+
+        if(to.getPiece() != null)
+            pieces.remove(to.getPiece());
         to.setPiece(piece);
         from.setPiece(null);
     }
@@ -258,11 +264,16 @@ public class Board {
         return (abs(from.getY() - to.getY()) == abs(from.getX() - to.getX()));
     }
 
-    private boolean isDiagonalOneMove(@NotNull Square from, @NotNull Square to) {
-        return abs(from.getY() - to.getY()) == 1 && isDiagonalMove(from, to);
+    private boolean isDiagonalOnePawnMove(@NotNull Square from, @NotNull Square to) {
+        return (abs(from.getY() - to.getY()) == 1   &&
+                isDiagonalMove(from, to))           &&
+                (from.getPiece().getColor() == PlayerColor.WHITE &&
+                 from.getY() < to.getY() ||
+                 from.getPiece().getColor() == PlayerColor.BLACK &&
+                 from.getY() > to.getY());
     }
 
     private boolean isPwanEating(Square from, Square to) {
-        return (isDiagonalOneMove(from, to) && to.getPiece() != null);
+        return (isDiagonalOnePawnMove(from, to) && to.getPiece() != null);
     }
 }
