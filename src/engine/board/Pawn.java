@@ -4,12 +4,8 @@ import chess.PieceType;
 import chess.PlayerColor;
 
 public class Pawn extends Piece {
-
-    private boolean hasDoneFirstMove;
-
     public Pawn(PlayerColor color){
         super(color);
-        hasDoneFirstMove = false;
     }
 
     public Piece promotion(Square square, Piece promotedTo) {
@@ -32,14 +28,13 @@ public class Pawn extends Piece {
         int x1 = to.getX();
         int y1 = to.getY();
         if (check_bounds(to) && (x1 == x)) {
-            if (!hasDoneFirstMove) {
-                this.hasDoneFirstMove = true;
+            if (super.nbrMoves == 0) {
                 return (((this.color == PlayerColor.WHITE) && ((y1 == y + 2) || y1 == y + 1)) || ((this.color == PlayerColor.BLACK) && ((y1 == y - 2) || (y1 == y - 1))));
             } else {
                 return ((this.color == PlayerColor.WHITE) && (y1 == y + 1)) || ((this.color == PlayerColor.BLACK) && ((y1 == y - 1)));
-
             }
-        }else return false;
+        } else
+            return false;
 
     }
 

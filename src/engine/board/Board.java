@@ -76,10 +76,34 @@ public class Board {
         if (from == null)
             return false;
 
-        System.out.println("yeah");
-        if(isSpecialMove(sFrom, sTo) || from.isAValidMove(sFrom, sTo)) {
+        if(validMove(sFrom, sTo)) {
             movePiece(from, sFrom, sTo);
             return true;
+        }
+        return false;
+    }
+
+    private boolean validMove(Square from, Square to) {
+        if (isSpecialMove(from, to))
+            return true;
+        // TODO : use from.getPiece().isAValidMove(sFrom, sTo)
+        switch (from.getPiece().getType()) {
+            case PAWN:
+                return (from.getPiece().isAValidMove(from, to) && to.getPiece() == null);
+            case KING:
+                // TODO : tester si le mouvemnt le met en echec, si c'est le cas --> false
+                break;
+            case ROOK:
+
+                break;
+            case QUEEN:
+                break;
+            case BISHOP:
+                break;
+            case KNIGHT:
+                return (from.getPiece().isAValidMove(from, to));
+            default:
+                return false;
         }
         return false;
     }
@@ -88,6 +112,8 @@ public class Board {
      * Special moves *
      *****************/
     public boolean isSpecialMove(Square from, Square to) {
+        if(from == null || to == null)
+            return false;
         Piece piece = from.getPiece();
         return (isSmallR(from, to)      ||
                 isBigR(from, to)        ||
@@ -95,11 +121,15 @@ public class Board {
     }
 
     public boolean isSmallR(Square from, Square to) {
+        if(from == null || to == null)
+            return false;
         Piece piece = from.getPiece();
         return false;
     }
 
     public boolean isBigR(Square from, Square to) {
+        if(from == null || to == null)
+            return false;
         Piece piece = from.getPiece();
         return false;
     }
@@ -109,17 +139,28 @@ public class Board {
                to = squares[toX][toY];
         int[] prayPos = new int[2];
 
-        if(squares[to.getX()][from.getY()].getPiece() != null   &&
-            from.getPiece().getType() == PieceType.PAWN         &&
-            isDiagonalOneMove(from, to)                         ) {
+        if (squares[to.getX()][from.getY()].getPiece() != null                      &&
+            squares[to.getX()][from.getY()].getPiece().getType() == PieceType.PAWN  &&
+            from.getPiece().getType() == PieceType.PAWN                             &&
+            squares[to.getX()][from.getY()].getPiece().getNbrMoves() == 1           &&
+            longStep(squares[to.getX()][from.getY()])                               &&
+            isDiagonalOneMove(from, to)                                             ) {
             pieces.remove(squares[to.getX()][from.getY()].getPiece());
             prayPos[0] = to.getX();
-            prayPos[1] = to.getY();
+            prayPos[1] = from.getY();
         } else {
             prayPos[0] = -1;
             prayPos[1] = -1;
         }
+
         return prayPos;
+    }
+
+    private boolean longStep(Square square) {
+        if (square.getPiece().getColor() == PlayerColor.WHITE)
+            return (square.getY() == 3);
+        else
+            return (square.getY() == 4);
     }
 
     private boolean isDiagonalOneMove(Square from, Square to) {

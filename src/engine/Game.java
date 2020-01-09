@@ -30,6 +30,11 @@ public class Game implements ChessController {
         return true;
     }
 
+    private void movePiece(Piece p, int fromX, int fromY, int toX, int toY ) {
+        view.removePiece(fromX, fromY);
+        view.putPiece(p.getType(), p.getColor(), toX, toY);
+    }
+
     @Override
     public void start(ChessView view) {
         this.view = view;
@@ -47,9 +52,13 @@ public class Game implements ChessController {
 
             if(passPos[0] >= 0 && passPos[1] >= 0) {
                 view.removePiece(passPos[0], passPos[1]);
-            } else if (board.isValid(fromX, fromY, toX, toY)) {
-                view.removePiece(fromX, fromY);
-                view.putPiece(from.getType(), from.getColor(), toX, toY);
+                movePiece(from, fromX, fromY, toX, toY);
+                from.moved();
+                return true;
+            }
+            if (board.isValid(fromX, fromY, toX, toY)) {
+                movePiece(from, fromX, fromY, toX, toY);
+                from.moved();
                 return true;
             }
             player1.changeTurn();

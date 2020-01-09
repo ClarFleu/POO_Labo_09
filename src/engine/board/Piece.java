@@ -5,6 +5,7 @@ import chess.PlayerColor;
 
 public abstract class Piece implements Movement {
     PlayerColor color;
+    int nbrMoves;
 
     public Piece(PlayerColor color){
         this.color = color;
@@ -21,6 +22,13 @@ public abstract class Piece implements Movement {
      */
     public abstract boolean isAValidMove(Square from, Square to);
 
+    public int getNbrMoves() {
+        return nbrMoves;
+    }
+
+    public void moved() {
+        ++nbrMoves;
+    }
 
     /**
      * Get the type of the current Piece
