@@ -48,7 +48,10 @@ public class Board {
             squares[to.getX()][from.getY()].getPiece().getNbrMoves() == 1           &&
             longStep(squares[to.getX()][from.getY()])                               &&
             isDiagonalOnePawnMove(from, to)                                             ) {
+            /* Eat the pray */
             pieces.remove(squares[to.getX()][from.getY()].getPiece());
+            squares[to.getX()][from.getY()].setPiece(null);
+            /* Move the 'eater' */
             to.setPiece(from.getPiece());
             from.setPiece(null);
             prayPos[0] = to.getX();
