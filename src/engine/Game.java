@@ -2,9 +2,12 @@ package engine;
 
 import chess.ChessController;
 import chess.ChessView;
+import chess.PieceType;
 import chess.PlayerColor;
 import engine.board.Board;
 import engine.board.Piece;
+
+import static javafx.scene.input.KeyCode.T;
 
 public class Game implements ChessController {
     private Board board;
@@ -55,6 +58,12 @@ public class Game implements ChessController {
                 movePiece(from, fromX, fromY, toX, toY);
                 from.moved();
                 return true;
+            }
+            if(board.isPromotion(fromX, fromY, toX, toY)) {
+                //TODO ask user and propmote pawn on view and for board
+                //PieceType choice = view.askUser("Pawn promotion",
+                        "Your pawn can be promoted, what PieceType do you want it to evolve to?",
+                //        new PieceType[]{PieceType.BISHOP, PieceType.KNIGHT, PieceType.QUEEN, PieceType.ROOK});
             }
             if (board.isValid(fromX, fromY, toX, toY)) {
                 movePiece(from, fromX, fromY, toX, toY);

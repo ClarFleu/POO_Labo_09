@@ -1,5 +1,6 @@
 package engine.board;
 
+import chess.ChessView;
 import chess.PieceType;
 import chess.PlayerColor;
 import org.jetbrains.annotations.NotNull;
@@ -31,10 +32,16 @@ public class Board {
         if (from != null && validMove(sFrom, sTo)) {
             if(sTo.getPiece() != null && sFrom.getPiece().getColor() == sTo.getPiece().getColor())
                 return false;
-            movePiece(from, sFrom, sTo);
+            else
+                movePiece(from, sFrom, sTo);
             return true;
         }
         return false;
+    }
+
+    public boolean isPromotion(int fromX, int fromY, int toX, int toY) {
+        Piece p = squares[fromX][fromY].getPiece();
+        return (p.getType() == PieceType.PAWN && ((Pawn)p).isPromotion(toY) && isValid(fromX, fromY, toX, toY));
     }
 
     public int[] isEnPassant(int fromX, int fromY, int toX, int toY) {

@@ -8,19 +8,10 @@ public class Pawn extends Piece {
         super(color);
     }
 
-    public Piece promotion(Square square, Piece promotedTo) {
-        if((promotedTo.getType() == PieceType.KING) || (promotedTo.getType() == PieceType.PAWN)){
-            return null;
-        }
-        else if(this.getColor() == PlayerColor.BLACK && square.getY() == 0){
-            return promotedTo;
-        }
-        else if(this.getColor() == PlayerColor.WHITE && square.getY() == 7){
-            return promotedTo;
-        }
-        else return null;
-        }
-
+    public boolean isPromotion(int y) {
+        return ((this.getColor() == PlayerColor.BLACK && y == 0) ||
+                (this.getColor() == PlayerColor.WHITE && y == 7));
+    }
 
     @Override
     public boolean isAValidMove(Square from, Square to) {
