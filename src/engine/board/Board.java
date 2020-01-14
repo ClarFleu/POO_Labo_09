@@ -67,7 +67,6 @@ public class Board {
 
         if (squares[to.getX()][from.getY()].getPiece() != null                      &&
             squares[to.getX()][from.getY()].getPiece().getType() == PieceType.PAWN  &&
-            from.getPiece().getType() == PieceType.PAWN                             &&
             squares[to.getX()][from.getY()].getPiece().getNbrMoves() == 1           &&
             longStep(squares[to.getX()][from.getY()])                               &&
             isDiagonalOnePawnMove(from, to)                                             ) {
@@ -83,8 +82,50 @@ public class Board {
             prayPos[0] = -1;
             prayPos[1] = -1;
         }
-
         return prayPos;
+    }
+
+    public int[] isRoque(int fromX, int fromY, int toX, int toY) {
+        Square king = squares[fromX][fromY];
+        int[] rookPos = {-1, -1};
+        if(abs(toX - fromX) == 2 && (toY - fromY == 0) && king.getPiece().getNbrMoves() == 0) {
+            Square rook;
+            Square rookEndPos;
+            if(toX < fromX) {
+                if(king.getPiece().getColor() == PlayerColor.WHITE) {
+                    rook = squares[0][0];
+                    rookPos[0] = 0;
+                    rookPos[1] = 0;
+                    rookEndPos = squares[3][0];
+                } else {
+                    rook = squares[0][7];
+                    rookPos[0] = 0;
+                    rookPos[1] = 7;
+                    rookEndPos = squares[2][7];
+                }
+            } else {
+                if (king.getPiece().getColor() == PlayerColor.WHITE) {
+                    rook = squares[7][0];
+                    rookPos[0] = 7;
+                    rookPos[1] = 0;
+                    rookEndPos = squares[5][0];
+                } else {
+                    rook = squares[7][7];
+                    rookPos[0] = 7;
+                    rookPos[1] = 7;
+                    rookEndPos = squares[4][7];
+                }
+            }
+            if(rook.getPiece() == null || rook.getPiece().getNbrMoves() != 0 || hasObstacle(rook, king)) {
+                rookPos[0] = -1;
+                rookPos[1] = -1;
+                return rookPos;
+            }
+            movePiece(rook.getPiece(), king, rookEndPos);
+            movePiece(rook.getPiece(), king, squares[toX][toY]);
+        }
+
+        return rookPos;
     }
 
     /***********
@@ -181,14 +222,7 @@ public class Board {
         if(pieceType == PieceType.KNIGHT)
             return (from.getPiece().isAValidMove(from, to));
 
-        if(pieceType == PieceType.ROOK)
-            if(isSmallR(from, to) || isBigR(from, to))
-                return true;
-
         if(pieceType == PieceType.KING) {
-            if(isSmallR(from, to) || isBigR(from, to))
-                return true;
-            // TODO : tester si le mouvement le met en echec, si c'est le cas --> false
             to.setPiece(from.getPiece());
             for (Square[] line : squares) {
                 for (Square square : line) {
@@ -268,16 +302,6 @@ public class Board {
                 if (squares[x][from.getY()].getPiece() != null)
                     return true;
             }
-        return false;
-    }
-
-    private boolean isSmallR(Square from, Square to) {
-        //TODO : petit roque
-        return false;
-    }
-
-    private boolean isBigR(Square from, Square to) {
-        //TODO : grand roque
         return false;
     }
 

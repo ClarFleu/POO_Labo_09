@@ -51,29 +51,49 @@ public class Game implements ChessController {
             return false;
 
         if (turnChange(from)) {
-            int[] passPos = board.isEnPassant(fromX, fromY, toX, toY);
+            if (from.getType() == PieceType.PAWN) {
+                int[] passPos = board.isEnPassant(fromX, fromY, toX, toY);
 
-            if(passPos[0] >= 0 && passPos[1] >= 0) {
-                view.removePiece(passPos[0], passPos[1]);
-                movePiece(from, fromX, fromY, toX, toY);
-                from.moved();
-                return true;
+                if(passPos[0] >= 0 && passPos[1] >= 0) {
+                    view.removePiece(passPos[0], passPos[1]);
+                    movePiece(from, fromX, fromY, toX, toY);
+                    from.moved();
+                    return true;
+                }
+                if(board.isPromotion(fromX, fromY, toX, toY)) {
+                    PieceChoice choices[] = {
+                            new PieceChoice(PieceType.BISHOP),
+                            new PieceChoice(PieceType.KNIGHT),
+                            new PieceChoice(PieceType.QUEEN),
+                            new PieceChoice(PieceType.ROOK)};
+                    PieceChoice choice = view.askUser(
+                            "Pawn promotion",
+                            "Your pawn can be promoted, what PieceType do you want it to evolve to?",
+                            choices);
+                    PlayerColor color = (player1.isTurn() ? player2.getPlayerColor() : player1.getPlayerColor());
+                    view.putPiece(choice.getType(), color, toX, toY);
+                    board.doPromotion(toX, toY, choice.getType(), color);
+                    view.removePiece(fromX, fromY);
+                    return true;
+                }
             }
-            if(board.isPromotion(fromX, fromY, toX, toY)) {
-                PieceChoice choices[] = {
-                        new PieceChoice(PieceType.BISHOP),
-                        new PieceChoice(PieceType.KNIGHT),
-                        new PieceChoice(PieceType.QUEEN),
-                        new PieceChoice(PieceType.ROOK)};
-                PieceChoice choice = view.askUser(
-                        "Pawn promotion",
-                        "Your pawn can be promoted, what PieceType do you want it to evolve to?",
-                        choices);
-                PlayerColor color = (player1.isTurn() ? player2.getPlayerColor() : player1.getPlayerColor());
-                view.putPiece(choice.getType(), color, toX, toY);
-                board.doPromotion(toX, toY, choice.getType(), color);
-                view.removePiece(fromX, fromY);
-                return true;
+
+            if(from.getType() == PieceType.KING) {
+                int[] rookPos = board.isRoque(fromX, fromY, toX, toY);
+                if (rookPos[0] != -1) {
+                    if(rookPos[1] == 0) {
+                        movePiece(board.getSquares()[rookPos[0]][rookPos[1]].getPiece(),
+                                rookPos[0], rookPos[1],
+                                (rookPos[0] == 0 ? 3 : 5), 0);
+                    } else {
+                        movePiece(board.getSquares()[rookPos[0]][rookPos[1]].getPiece(),
+                                rookPos[0], rookPos[1],
+                                (rookPos[0] == 0 ? 3 : 5), 7);
+                    }
+                    movePiece(from, fromX, fromY, toX, toY);
+                    return true;
+                }
+                return false;
             }
             if (board.isValid(fromX, fromY, toX, toY)) {
                 movePiece(from, fromX, fromY, toX, toY);
