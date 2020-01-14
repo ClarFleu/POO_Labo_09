@@ -44,6 +44,16 @@ public class Board {
         return (p.getType() == PieceType.PAWN && ((Pawn)p).isPromotion(toY) && isValid(fromX, fromY, toX, toY));
     }
 
+    public void doPromotion(int x, int y, PieceType type, PlayerColor color) {
+        switch (type) {
+            case ROOK: squares[x][y].setPiece(new Rook(color)); break;
+            case QUEEN: squares[x][y].setPiece(new Queen(color)); break;
+            case BISHOP: squares[x][y].setPiece(new Bishop(color)); break;
+            case KNIGHT: squares[x][y].setPiece(new Knight(color)); break;
+            default: break;
+        }
+    }
+
     public int[] isEnPassant(int fromX, int fromY, int toX, int toY) {
         Square from = squares[fromX][fromY],
                to = squares[toX][toY];
