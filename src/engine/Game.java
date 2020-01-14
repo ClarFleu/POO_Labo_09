@@ -60,9 +60,15 @@ public class Game implements ChessController {
                 return true;
             }
             if(board.isPromotion(fromX, fromY, toX, toY)) {
-                PieceChoice choices[] = {new PieceChoice(PieceType.BISHOP), new PieceChoice(PieceType.KNIGHT), new PieceChoice(PieceType.QUEEN), new PieceChoice(PieceType.ROOK)};
-                PieceChoice choice = view.askUser("Pawn promotion",
-                        "Your pawn can be promoted, what PieceType do you want it to evolve to?", choices);
+                PieceChoice choices[] = {
+                        new PieceChoice(PieceType.BISHOP),
+                        new PieceChoice(PieceType.KNIGHT),
+                        new PieceChoice(PieceType.QUEEN),
+                        new PieceChoice(PieceType.ROOK)};
+                PieceChoice choice = view.askUser(
+                        "Pawn promotion",
+                        "Your pawn can be promoted, what PieceType do you want it to evolve to?",
+                        choices);
                 PlayerColor color = (player1.isTurn() ? player2.getPlayerColor() : player1.getPlayerColor());
                 view.putPiece(choice.getType(), color, toX, toY);
                 board.doPromotion(toX, toY, choice.getType(), color);

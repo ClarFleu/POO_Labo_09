@@ -1,9 +1,7 @@
 package engine.board;
 
-import chess.ChessView;
 import chess.PieceType;
 import chess.PlayerColor;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,10 +44,18 @@ public class Board {
 
     public void doPromotion(int x, int y, PieceType type, PlayerColor color) {
         switch (type) {
-            case ROOK: squares[x][y].setPiece(new Rook(color)); break;
-            case QUEEN: squares[x][y].setPiece(new Queen(color)); break;
-            case BISHOP: squares[x][y].setPiece(new Bishop(color)); break;
-            case KNIGHT: squares[x][y].setPiece(new Knight(color)); break;
+            case ROOK:
+                squares[x][y].setPiece(new Rook(color));
+                break;
+            case QUEEN:
+                squares[x][y].setPiece(new Queen(color));
+                break;
+            case BISHOP:
+                squares[x][y].setPiece(new Bishop(color));
+                break;
+            case KNIGHT:
+                squares[x][y].setPiece(new Knight(color));
+                break;
             default: break;
         }
     }
@@ -159,19 +165,14 @@ public class Board {
         }
     }
 
-    private void movePiece(Piece piece, Square from, @NotNull Square to) {
-        System.out.println(piece.getType() + " " + piece.getColor() + "\n moved from (" + from.getX() + ", " + from.getY() + ") to (" + to.getX() + ", " + to.getY() + ")");
-        if(to.getPiece() != null)
-            System.out.println("and ate " + to.getPiece().getType() + " " + to.getPiece().getColor());
-
+    private void movePiece(Piece piece, Square from, Square to) {
         if(to.getPiece() != null)
             pieces.remove(to.getPiece());
         to.setPiece(piece);
         from.setPiece(null);
     }
 
-    private boolean validMove(@NotNull Square from, Square to) {
-        // TODO : use from.getPiece().isAValidMove(sFrom, sTo)
+    private boolean validMove(Square from, Square to) {
         PieceType pieceType = from.getPiece().getType();
 
         if(pieceType == PieceType.PAWN)
@@ -187,7 +188,16 @@ public class Board {
         if(pieceType == PieceType.KING) {
             if(isSmallR(from, to) || isBigR(from, to))
                 return true;
-            // TODO : tester si le mouvemnt le met en echec, si c'est le cas --> false
+            // TODO : tester si le mouvement le met en echec, si c'est le cas --> false
+            to.setPiece(from.getPiece());
+            for (Square[] line : squares) {
+                for (Square square : line) {
+                    if(isChec(square, to)){
+                        return false;
+                    }
+                }
+            }
+            return (from.getPiece().isAValidMove(from, to));
         }
 
         if(from.getPiece().isAValidMove(from, to))
@@ -195,7 +205,7 @@ public class Board {
         return false;
     }
 
-    private boolean hasObstacle(@NotNull Square from, Square to) {
+    private boolean hasObstacle(Square from, Square to) {
         PieceType pieceType = from.getPiece().getType();
 
         if(pieceType == PieceType.ROOK || (pieceType == PieceType.QUEEN && !isDiagonalMove(from, to)))
@@ -206,7 +216,7 @@ public class Board {
         return true;
     }
 
-    private boolean hasDiagonalObstacle(@NotNull Square from, Square to) {
+    private boolean hasDiagonalObstacle(Square from, Square to) {
         boolean up = to.getY() > from.getY(),
                 right = to.getX() > from.getX();
         if(up) {
@@ -235,7 +245,7 @@ public class Board {
         return false;
     }
 
-    private  boolean hasLinearObstacle(@NotNull Square from, Square to) {
+    private  boolean hasLinearObstacle(Square from, Square to) {
         boolean up = to.getY() > from.getY(),
                 right = to.getX() > from.getX();
         if(up)
@@ -271,20 +281,20 @@ public class Board {
         return false;
     }
 
-    private boolean longStep(@NotNull Square square) {
+    private boolean longStep(Square square) {
         if (square.getPiece().getColor() == PlayerColor.WHITE)
             return (square.getY() == 3);
         else
             return (square.getY() == 4);
     }
 
-    private boolean isDiagonalMove(Square from, @NotNull Square to) {
+    private boolean isDiagonalMove(Square from, Square to) {
         if(to.getY() < 0 || to.getX() < 0 || to.getY() >= squares.length || to.getX() >= squares.length)
             return false;
         return (abs(from.getY() - to.getY()) == abs(from.getX() - to.getX()));
     }
 
-    private boolean isDiagonalOnePawnMove(@NotNull Square from, @NotNull Square to) {
+    private boolean isDiagonalOnePawnMove(Square from, Square to) {
         return (abs(from.getY() - to.getY()) == 1   &&
                 isDiagonalMove(from, to))           &&
                 (from.getPiece().getColor() == PlayerColor.WHITE &&
@@ -295,5 +305,34 @@ public class Board {
 
     private boolean isPwanEating(Square from, Square to) {
         return (isDiagonalOnePawnMove(from, to) && to.getPiece() != null);
+    }
+
+    private boolean isChec(Square from, Square king) {
+        // You can't eat your own king
+        if(from.getPiece() == null)
+            return false;
+        if (from.getPiece().getColor() == king.getPiece().getColor())
+            return false;
+
+        // if a piece from the other color can reach the place the king wants to move to
+        // the move is not valid
+        if ((from.getPiece().getType() == PieceType.QUEEN ||
+                from.getPiece().getType() == PieceType.BISHOP ||
+                from.getPiece().getType() == PieceType.ROOK) &&
+                !hasObstacle(from, king)) {
+            return false;
+        }
+        if (from.getPiece().getType() != PieceType.PAWN && from.getPiece().isAValidMove(from, king)) {
+            return false;
+        }
+        if(isPwanEating(from, king)) {
+            return false;
+        }
+
+        return false;
+    }
+
+    private boolean isChecMate() {
+        return false;
     }
 }
