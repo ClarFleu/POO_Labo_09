@@ -31,9 +31,10 @@ public class Board {
         Piece from   = sFrom.getPiece();
 
         if (from == null            ||
+            sTo == sFrom            ||
             !validMove(sFrom, sTo)  ||
-            sTo.getPiece() != null  ||
-            sFrom.getPiece().getColor() == sTo.getPiece().getColor())
+            (sTo.getPiece() != null  &&
+            sFrom.getPiece().getColor() == sTo.getPiece().getColor()))
             return false;
 
         movePiece(sFrom, sTo);
@@ -164,6 +165,29 @@ public class Board {
         return rookPos;
     }
 
+    public boolean isInCheck(Square king, PlayerColor color) {
+        boolean changePiece = false;
+
+        if(king.getPiece() == null) {
+            System.out.println("Piece changée");
+            changePiece = true;
+            king.setPiece(new King(color));
+        }
+
+        for (Square[] line : squares) {
+            for (Square square : line) {
+                if(isChec(square, king)) {
+                    if(changePiece)
+                        king.setPiece(null);
+                    return true;
+                }
+            }
+        }
+        if(changePiece)
+            king.setPiece(null);
+        return false;
+    }
+
     /**********
      * Getter *
      **********/
@@ -230,15 +254,10 @@ public class Board {
         } else if (pieceType != PieceType.KING)
             return from.getPiece().isAValidMove(from, to);
         else {
-            //to.setPiece(from.getPiece());
-            for (Square[] line : squares) {
-                for (Square square : line) {
-                    //if(isChec(square, to)) {
-                        // TODO faire le test de la mise en echec
-                        //return false;
-                    //}
-                }
-            }
+            if(isInCheck(to, from.getPiece().getColor()))
+                return false;
+
+            to.setPiece(null);
             return (from.getPiece().isAValidMove(from, to));
         }
     }
@@ -346,7 +365,6 @@ public class Board {
      * @return true if the king is in chack situation, false otherwise
      */
     private boolean isChec(Square from, Square king) {
-        // TODO tout re-faire /!\
         //it there is nothing on the square...obvious
         if(from.getPiece() == null)
             return false;

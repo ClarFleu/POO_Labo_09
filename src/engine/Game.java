@@ -35,6 +35,29 @@ public class Game implements ChessController {
         // Check that the right piece is being moved (the black player can't move a white pawn)
         // And change turns for the next move
         if (turnChange(from)) {
+
+            if(from.getType() != PieceType.KING) {
+                // do the move
+                Piece tmp = board.getSquares()[toX][toY].getPiece();
+                board.getSquares()[fromX][fromY].setPiece(null);
+                board.getSquares()[toX][toY].setPiece(from);
+                // Check if the move will let the player in check state
+                if (board.isInCheck(player1.isTurn() ? player2.getKing() : player1.getKing(),
+                        from.getColor())) {
+                    System.out.println(  " -- > " + (player1.isTurn() ? player2.getKing() : player1.getKing()).getPiece().getColor());
+                    player1.changeTurn();
+                    player2.changeTurn();
+                    System.out.println("Oups tour du joueur blanc ? " + player1.isTurn());
+                    // undo the move
+                    board.getSquares()[fromX][fromY].setPiece(from);
+                    board.getSquares()[toX][toY].setPiece(tmp);
+                    return false;
+                }
+                // undo the move
+                board.getSquares()[fromX][fromY].setPiece(from);
+                board.getSquares()[toX][toY].setPiece(tmp);
+            }
+
             // If the piece to be moved is a Pawn
             // the move can be a "Prise en passant"
             // or the promotion of said Pawn
@@ -46,6 +69,11 @@ public class Game implements ChessController {
                     view.removePiece(passPos[0], passPos[1]);
                     movePiece(from, fromX, fromY, toX, toY);
                     from.moved();
+
+                    if (board.isInCheck(player1.isTurn() ? player1.getKing() : player2.getKing(),
+                            (player1.isTurn() ? player1.getPlayerColor() : player2.getPlayerColor()))){
+                        view.displayMessage("Echec !");
+                    }
                     return true;
                 }
 
@@ -64,6 +92,11 @@ public class Game implements ChessController {
                     view.putPiece(choice.getType(), color, toX, toY);
                     board.doPromotion(toX, toY, choice.getType(), color);
                     view.removePiece(fromX, fromY);
+
+                    if (board.isInCheck(player1.isTurn() ? player1.getKing() : player2.getKing(),
+                            (player1.isTurn() ? player1.getPlayerColor() : player2.getPlayerColor()))){
+                        view.displayMessage("Echec !");
+                    }
                     return true;
                 }
             }
@@ -83,19 +116,37 @@ public class Game implements ChessController {
                                 (rookPos[0] == 0 ? 3 : 5), 7);
                     }
                     movePiece(from, fromX, fromY, toX, toY);
+
+                    if (board.isInCheck(player1.isTurn() ? player1.getKing() : player2.getKing(),
+                            (player1.isTurn() ? player1.getPlayerColor() : player2.getPlayerColor()))){
+                        view.displayMessage("Echec !");
+                    }
                     return true;
                 }
+                setKing(board.getSquares()[toX][toY]);
             }
 
             // All other pieces or moves can be tested in the default method
             if (board.isValid(fromX, fromY, toX, toY)) {
+                if(from.getType() == PieceType.KING)
+                    setKing(board.getSquares()[toX][toY]);
                 movePiece(from, fromX, fromY, toX, toY);
                 from.moved();
+
+                if (board.isInCheck(player1.isTurn() ? player1.getKing() : player2.getKing(),
+                        (player1.isTurn() ? player1.getPlayerColor() : player2.getPlayerColor()))){
+                    view.displayMessage("Echec !");
+                }
                 return true;
             }
             // If the move was not a leagal chess move, the players role revert back
             player1.changeTurn();
             player2.changeTurn();
+        }
+
+        if (board.isInCheck(player1.isTurn() ? player1.getKing() : player2.getKing(),
+                (player1.isTurn() ? player1.getPlayerColor() : player2.getPlayerColor()))){
+            view.displayMessage("Echec !");
         }
         return false;
     }
@@ -117,6 +168,8 @@ public class Game implements ChessController {
         for (Square[] squares : board.getSquares()) {
             for (Square square: squares) {
                 if(square.getPiece() != null) {
+                    if(square.getPiece().getType() == PieceType.KING)
+                        setKing(square);
                     int x = square.getX();
                     int y = square.getY();
                     if (x >= 0)
@@ -137,6 +190,15 @@ public class Game implements ChessController {
         player1.changeTurn();
         player2.changeTurn();
         return true;
+    }
+
+    private void setKing(Square king) {
+        if(king.getPiece() == null || king.getPiece().getType() != PieceType.KING)
+            return;
+        if (king.getPiece().getColor() == player1.getPlayerColor())
+            player1.setKing(king);
+        else
+            player2.setKing(king);
     }
 
     private void movePiece(Piece p, int fromX, int fromY, int toX, int toY ) {

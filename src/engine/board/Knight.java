@@ -10,7 +10,6 @@ public class Knight extends Piece {
         super(color);
     }
 
-
     @Override
     public boolean isAValidMove(Square from, Square to) {
        int moveX = abs(from.getX() - to.getX());

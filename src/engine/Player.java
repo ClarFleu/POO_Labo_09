@@ -1,10 +1,12 @@
 package engine;
 
 import chess.PlayerColor;
+import engine.board.Square;
 
 public class Player {
     private PlayerColor color;
     private boolean turn;
+    private Square king;
 
     public Player(PlayerColor teamColor, boolean turn){
         this.color = teamColor;
@@ -18,6 +20,13 @@ public class Player {
         return color;
     }
 
+    Square getKing() {
+        return king;
+    }
+
+    public void setKing(Square king) {
+        this.king = king;
+    }
     /**
      * Active ou desactive le tour du joueur courant
      */
