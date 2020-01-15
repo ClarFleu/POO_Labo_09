@@ -22,14 +22,26 @@ public abstract class Piece implements Movement {
      */
     public abstract boolean isAValidMove(Square from, Square to);
 
+    /**
+     *
+     * @return
+     */
+    public abstract boolean canBeBlocked();
+
+    /**
+     *
+     * @return
+     */
     public int getNbrMoves() {
         return nbrMoves;
     }
 
+    /**
+     *
+     */
     public void moved() {
         ++nbrMoves;
     }
-
 
     /**
      * Get the type of the current Piece

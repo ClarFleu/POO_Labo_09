@@ -17,6 +17,11 @@ public class Bishop extends Piece implements DiagonalMovement{
     }
 
     @Override
+    public boolean canBeBlocked() {
+        return true;
+    }
+
+    @Override
     public PieceType getType() {
         return PieceType.BISHOP;
     }

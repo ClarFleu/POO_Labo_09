@@ -32,6 +32,11 @@ public class Pawn extends Piece implements DiagonalMovement {
     }
 
     @Override
+    public boolean canBeBlocked() {
+        return false;
+    }
+
+    @Override
     public PieceType getType() {
         return PieceType.PAWN;
     }

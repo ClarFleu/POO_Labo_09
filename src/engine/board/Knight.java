@@ -19,6 +19,11 @@ public class Knight extends Piece {
     }
 
     @Override
+    public boolean canBeBlocked() {
+        return false;
+    }
+
+    @Override
     public PieceType getType() {
         return PieceType.KNIGHT;
     }

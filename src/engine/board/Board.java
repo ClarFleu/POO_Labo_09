@@ -17,6 +17,14 @@ public class Board {
         init();
     }
 
+    /**
+     * Checks if the move from the given position to the given final position is a valid move
+     * @param fromX (int) value x of the origin position
+     * @param fromY (int) value y of the origin position
+     * @param toX (int) value x of the final position
+     * @param toY (int) value y of the final position
+     * @return true if the move is leagal and can be made, false otherwise
+     */
     public boolean isValid(int fromX, int fromY, int toX, int toY) {
         Square sFrom = squares[fromX][fromY],
                sTo   = squares[toX][toY];
@@ -26,17 +34,32 @@ public class Board {
             if(sTo.getPiece() != null && sFrom.getPiece().getColor() == sTo.getPiece().getColor())
                 return false;
             else
-                movePiece(from, sFrom, sTo);
+                movePiece(sFrom, sTo);
             return true;
         }
         return false;
     }
 
+    /**
+     * Checks if the given movement is a promotion (when a Pawn reaches the end of the board)
+     * @param fromX (int) value x of the origin position
+     * @param fromY (int) value y of the origin position
+     * @param toX (int) value x of the final position
+     * @param toY (int) value y of the final position
+     * @return true if the move is a promotion move for a pawn, false otherwise
+     */
     public boolean isPromotion(int fromX, int fromY, int toX, int toY) {
         Piece p = squares[fromX][fromY].getPiece();
         return (p.getType() == PieceType.PAWN && ((Pawn)p).isPromotion(toY) && isValid(fromX, fromY, toX, toY));
     }
 
+    /**
+     * Does the promotion of a Pawn to a new Piece of the given type, and places it on the given position
+     * @param x (int) value x of the position in which to place the new Piece
+     * @param y (int) value y of the position in which to place the new Piece
+     * @param type (PieceType) type of Piece to which the Pawn is to be promoted
+     * @param color (PlayerColor) color of the Piece
+     */
     public void doPromotion(int x, int y, PieceType type, PlayerColor color) {
         switch (type) {
             case ROOK:
@@ -55,6 +78,15 @@ public class Board {
         }
     }
 
+    /**
+     * Checks if the given move is a "Prise en passant"
+     * @param fromX (int) value x of the origin position
+     * @param fromY (int) value y of the origin position
+     * @param toX (int) value x of the final position
+     * @param toY (int) value y of the final position
+     * @return prayPos (int[]) the position of the Pawn that falls victim from the move if it is a "Prise en passant"
+     *                 {-1, -1} otherwise
+     */
     public int[] isEnPassant(int fromX, int fromY, int toX, int toY) {
         Square from = squares[fromX][fromY],
                to = squares[toX][toY];
@@ -78,6 +110,17 @@ public class Board {
         return prayPos;
     }
 
+    /**
+     * Checks if the move from the given origin to the given final position is a "Roque" move
+     * and finds the Rook with which the move is to be donn
+     * @param fromX (int) value x of the origin position
+     * @param fromY (int) value y of the origin position
+     * @param toX (int) value x of the final position
+     * @param toY (int) value y of the final position
+     * @return prayPos (int[]) the position of the Rook with which the King will change position
+     *                 if it is a "Roque" move
+     *                 {-1, -1} otherwise
+     */
     public int[] isRoque(int fromX, int fromY, int toX, int toY) {
         Square king = squares[fromX][fromY];
         int[] rookPos = {-1, -1};
@@ -114,8 +157,8 @@ public class Board {
                 rookPos[1] = -1;
                 return rookPos;
             }
-            movePiece(rook.getPiece(), king, rookEndPos);
-            movePiece(rook.getPiece(), king, squares[toX][toY]);
+            movePiece(king, rookEndPos);
+            movePiece(king, squares[toX][toY]);
         }
 
         return rookPos;
@@ -124,6 +167,10 @@ public class Board {
     /**********
      * Getter *
      **********/
+    /**
+     * Getter for the variable squares of the board, which is a list of positions and Pieces
+     * @return squares (Square[][]) the list giving the actual status of the board game
+     */
     public Square[][] getSquares() {
         return squares;
     }
@@ -131,7 +178,10 @@ public class Board {
     /*******************
      * Private methods *
      *******************/
-    private void init(){
+    /**
+     * Method initialising the board in the beginning of a game
+     */
+    private void init() {
         squares[0][0].setPiece(new Rook(PlayerColor.WHITE));
         squares[1][0].setPiece(new Knight(PlayerColor.WHITE));
         squares[2][0].setPiece(new Bishop(PlayerColor.WHITE));
@@ -156,37 +206,49 @@ public class Board {
         }
     }
 
-    private void movePiece(Piece piece, Square from, Square to) {
-        to.setPiece(piece);
+    /**
+     * Does the given move
+     * @param from (Square) origin of the move to be done
+     * @param to (Square) final position of the Piece affter the move
+     */
+    private void movePiece(Square from, Square to) {
+        to.setPiece(from.getPiece());
         from.setPiece(null);
     }
 
+    /**
+     * Checks if the move from the given origin to the given destination is valid
+     * @param from (Square) origin of the move
+     * @param to (Square) destination of the move
+     * @return true if the move is valid, false otherwise
+     */
     private boolean validMove(Square from, Square to) {
         PieceType pieceType = from.getPiece().getType();
 
-        if(pieceType == PieceType.PAWN)
-            return (from.getPiece().isAValidMove(from, to));
-
-        if(pieceType == PieceType.KNIGHT)
-            return (from.getPiece().isAValidMove(from, to));
-
-        if(pieceType == PieceType.KING) {
+        if (from.getPiece().canBeBlocked()) {
+            return from.getPiece().isAValidMove(from, to) && !hasObstacle(from, to);
+        } else if (pieceType != PieceType.KING)
+            return from.getPiece().isAValidMove(from, to);
+        else {
             to.setPiece(from.getPiece());
             for (Square[] line : squares) {
                 for (Square square : line) {
-                    if(isChec(square, to)){
+                    if(isChec(square, to)) {
+                        // TODO faire le test de la mise en echec
                         return false;
                     }
                 }
             }
             return (from.getPiece().isAValidMove(from, to));
         }
-
-        if(from.getPiece().isAValidMove(from, to))
-            return !hasObstacle(from, to);
-        return false;
     }
 
+    /**
+     * Checks if the given move is impeded by an obstacle of any sort
+     * @param from (Square) origin of the move
+     * @param to (Square) destination of the move
+     * @return true if there is an obstacle, false otherwise
+     */
     private boolean hasObstacle(Square from, Square to) {
         PieceType pieceType = from.getPiece().getType();
 
@@ -198,6 +260,12 @@ public class Board {
         return true;
     }
 
+    /**
+     * Checks if the given diagonal move is impeded by an obstacle of any sort
+     * @param from (Square) origin of the move
+     * @param to (Square) destination of the move
+     * @return true if there is an obstacle, false otherwise
+     */
     private boolean hasDiagonalObstacle(Square from, Square to) {
         boolean up = to.getY() > from.getY(),
                 right = to.getX() > from.getX();
@@ -227,6 +295,12 @@ public class Board {
         return false;
     }
 
+    /**
+     * Checks if the given linear move is impeded by an obstacle of any sort
+     * @param from (Square) origin of the move
+     * @param to (Square) destination of the move
+     * @return true if there is an obstacle, false otherwise
+     */
     private  boolean hasLinearObstacle(Square from, Square to) {
         boolean up = to.getY() > from.getY(),
                 right = to.getX() > from.getX();
@@ -253,12 +327,24 @@ public class Board {
         return false;
     }
 
+    /**
+     * Checks if the given move is a diagonal move
+     * @param from (Square) origin of the move
+     * @param to (Square) destination of the move
+     * @return true if the move is a diagonal move, false otherwise
+     */
     private boolean isDiagonalMove(Square from, Square to) {
         if(to.getY() < 0 || to.getX() < 0 || to.getY() >= squares.length || to.getX() >= squares.length)
             return false;
         return (abs(from.getY() - to.getY()) == abs(from.getX() - to.getX()));
     }
 
+    /**
+     * Checks if the given Piece position can move to the given king putting it in a check situation
+     * @param from (Square) origin of the move
+     * @param king (Square) possible destination of the given piece and position of the King
+     * @return true if the king is in chack situation, false otherwise
+     */
     private boolean isChec(Square from, Square king) {
         // TODO tout re-faire /!\
         // You can't eat your own king
@@ -281,6 +367,10 @@ public class Board {
         return false;
     }
 
+    /**
+     * Checks if the Board is in a check mate situation, meaning, one of the king is stuck
+     * @return
+     */
     private boolean isChecMate() {
         return false;
     }
