@@ -1,5 +1,8 @@
 package engine.board;
 
+import chess.PieceType;
+import chess.PlayerColor;
+
 public class Square {
     private int x;
     private int y;
@@ -42,4 +45,10 @@ public class Square {
         this.piece = piece;
     }
 
+    public boolean didLongStep() {
+        if(piece == null || piece.getType() != PieceType.PAWN)
+            return false;
+        return (((piece.color == PlayerColor.WHITE) && y == 3 ) ||
+                ((piece.color == PlayerColor.BLACK) && y == 4));
+    }
 }

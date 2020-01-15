@@ -6,6 +6,7 @@ import chess.PieceType;
 import chess.PlayerColor;
 import engine.board.Board;
 import engine.board.Piece;
+import engine.board.Square;
 
 import static javafx.scene.input.KeyCode.T;
 
@@ -118,11 +119,15 @@ public class Game implements ChessController {
     }
 
     private void initView() {
-        for (Piece piece : board.getPieces()) {
-            int x = board.getPosition(piece)[0];
-            int y = board.getPosition(piece)[1];
-            if(x >= 0)
-                view.putPiece(piece.getType(), piece.getColor(), x, y);
+        for (Square[] squares : board.getSquares()) {
+            for (Square square: squares) {
+                if(square.getPiece() != null) {
+                    int x = square.getX();
+                    int y = square.getY();
+                    if (x >= 0)
+                        view.putPiece(square.getPiece().getType(), square.getPiece().getColor(), x, y);
+                }
+            }
         }
     }
 }
