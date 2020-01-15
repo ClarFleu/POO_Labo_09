@@ -5,7 +5,7 @@ import chess.PlayerColor;
 
 import static java.lang.Math.abs;
 
-public class Pawn extends Piece implements DiagonalMovement {
+public class Pawn extends Piece implements DiagonalMovement, LinearMovement {
     public Pawn(PlayerColor color){
         super(color);
     }
@@ -34,8 +34,8 @@ public class Pawn extends Piece implements DiagonalMovement {
     }
 
     @Override
-    public boolean hasObstacle(Square[] path) {
-        return false;
+    public boolean hasObstacle(Square[] path, int pathSize) {
+        return hasLObstacle(path, pathSize);
     }
 
     @Override

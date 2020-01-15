@@ -24,7 +24,7 @@ public class King extends Piece {
     }
 
     @Override
-    public boolean hasObstacle(Square[] path) {
+    public boolean hasObstacle(Square[] path, int pathSize) {
         return false;
     }
 

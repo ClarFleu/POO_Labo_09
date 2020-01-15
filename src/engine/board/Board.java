@@ -3,7 +3,7 @@ package engine.board;
 import chess.PieceType;
 import chess.PlayerColor;
 
-import static java.lang.Math.abs;
+import static java.lang.Math.*;
 
 public class Board {
     private Square[][] squares;
@@ -269,93 +269,25 @@ public class Board {
      * @return true if there is an obstacle, false otherwise
      */
     private boolean hasObstacle(Square from, Square to) {
-        PieceType pieceType = from.getPiece().getType();
+        int minX = min(from.getX(), to.getX()),
+            minY = min(from.getY(), to.getY()),
+            maxX = max(from.getX(), to.getX()),
+            maxY = max(from.getY(), to.getY());
+        int cpt = 0;
+        for (int x = minX; x <= maxX; ++x)
+            for (int y = minY; y <= maxY; ++y)
+                if(!squares[x][y].isEmpty())
+                    ++cpt;
 
-        if(pieceType == PieceType.ROOK || (pieceType == PieceType.QUEEN && !isDiagonalMove(from, to)))
-            return hasLinearObstacle(from, to);
-
-        if(pieceType == PieceType.BISHOP || (pieceType == PieceType.QUEEN && isDiagonalMove(from, to)))
-            return hasDiagonalObstacle(from, to);
-        return true;
-    }
-
-    /**
-     * Checks if the given diagonal move is impeded by an obstacle of any sort
-     * @param from (Square) origin of the move
-     * @param to (Square) destination of the move
-     * @return true if there is an obstacle, false otherwise
-     */
-    private boolean hasDiagonalObstacle(Square from, Square to) {
-        boolean up = to.getY() > from.getY(),
-                right = to.getX() > from.getX();
-        if(up) {
-            if(right)
-                for (int i = 1; i < to.getY()-from.getY() ; ++i) {
-                    if (squares[from.getX() + i][from.getY() + i].getPiece() != null)
-                        return true;
-                }
-            else
-                for (int i = 1; i < to.getY()-from.getY() ; ++i) {
-                    if (squares[from.getX() - i][from.getY() + i].getPiece() != null)
-                        return true;
-                }
-        } else {
-            if(right)
-                for (int i = 1; i < from.getY()-to.getY() ; ++i) {
-                    if (squares[from.getX() + i][from.getY() - i].getPiece() != null)
-                        return true;
-                }
-            else
-                for (int i = 1; i < from.getY()-to.getY() ; ++i) {
-                    if (squares[from.getX() - i][from.getY() - i].getPiece() != null)
-                        return true;
-                }
+        Square path[] = new Square[cpt];
+        cpt = 0;
+        for (int x = minX; x <= maxX; ++x) {
+            for (int y = minY; y <= maxY; ++y) {
+                if(!squares[x][y].isEmpty())
+                    path[cpt++] = squares[x][y];
+            }
         }
-        return false;
-    }
-
-    /**
-     * Checks if the given linear move is impeded by an obstacle of any sort
-     * @param from (Square) origin of the move
-     * @param to (Square) destination of the move
-     * @return true if there is an obstacle, false otherwise
-     */
-    private  boolean hasLinearObstacle(Square from, Square to) {
-        boolean up = to.getY() > from.getY(),
-                right = to.getX() > from.getX();
-        if(up)
-            for (int y = to.getY()-1; y > from.getY() ; --y) {
-                if (squares[from.getX()][y].getPiece() != null)
-                    return true;
-            }
-        else
-            for (int y = to.getY()+1; y < from.getY() ; ++y) {
-                if (squares[from.getX()][y].getPiece() != null)
-                    return true;
-            }
-        if(right)
-            for (int x = to.getX()+1; x < from.getX() ; ++x) {
-                if (squares[x][from.getY()].getPiece() != null)
-                    return true;
-            }
-        else
-            for (int x = to.getX()-1; x > from.getX() ; --x) {
-                if (squares[x][from.getY()].getPiece() != null)
-                    return true;
-            }
-        return false;
-    }
-
-    /**
-     * Checks if the given move is a diagonal move
-     * @param from (Square) origin of the move
-     * @param to (Square) destination of the move
-     * @return true if the move is a diagonal move, false otherwise
-     */
-    private boolean isDiagonalMove(Square from, Square to) {
-        if(to.getY() < 0 || to.getX() < 0 || to.getY() >= squares.length || to.getX() >= squares.length)
-            return false;
-        return (abs(from.getY() - to.getY()) == abs(from.getX() - to.getX()));
+        return from.getPiece().hasObstacle(path, cpt);
     }
 
     /**

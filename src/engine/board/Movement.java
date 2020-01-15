@@ -6,12 +6,7 @@ public interface Movement {
      */
     boolean isAValidMove(Square from, Square to);
 
-    /**
-     * Checks if the movement has an obstacle
-     * @param path (Square[]) list of suqares between the beggining and the end of the mave
-     * @return true if there is an obstacle, false otherwise
-     */
-    boolean hasObstacle(Square[] path);
+    boolean hasObstacle(Square[] path, int pathSize);
 
     /**
      * Check if the square that we intend to go to is in the board bounds

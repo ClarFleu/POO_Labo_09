@@ -24,9 +24,11 @@ public class Queen extends Piece implements LinearMovement, DiagonalMovement{
     }
 
     @Override
-    public boolean hasObstacle(Square[] path) {
-        // TODO checker la présence d'obstacle
-        return false;
+    public boolean hasObstacle(Square[] path, int pathSize) {
+        if (path[0].getX() == path[pathSize-1].getX() ||
+            path[0].getY() == path[pathSize-1].getY())
+            return hasLObstacle(path, pathSize);
+        return hasDObstacle(path, pathSize);
     }
 
 }

@@ -4,6 +4,35 @@ import static java.lang.Math.abs;
 
 public interface LinearMovement extends Movement {
     /**
+     * Checks if the movement has an obstacle
+     * @param path (Square[]) list of suqares between the beggining and the end of the mave
+     * @param pathSize
+     * @return true if there is an obstacle, false otherwise
+     */
+    default boolean hasLObstacle(Square[] path, int pathSize) {
+        if(pathSize == 0) {
+            return false;
+        }
+        Square  from = path[0],
+                to = path[pathSize-1];
+        if(from.getY() == to.getY()) {
+            for (Square square : path)
+                if (square.getPiece() != null &&
+                    square != from &&
+                    square != to)
+                    return true;
+        } else if (from.getX() == to.getX()) {
+            for (Square square : path)
+                if (square.getX() == from.getX() &&
+                    square.getPiece() != null &&
+                    square != from &&
+                    square != to)
+                    return true;
+        }
+        return false;
+    }
+
+    /**
      * Check if the move intended by the player is horizontal or vertical
      */
     default boolean isLinearMove(Square from, Square to){
