@@ -21,7 +21,7 @@ public class Pawn extends Piece implements DiagonalMovement {
         int y = from.getY();
         int x1 = to.getX();
         int y1 = to.getY();
-        if (check_bounds(to) && (x1 == x) && to.getPiece() == null) {
+        if (checkBounds(to) && (x1 == x) && to.getPiece() == null) {
             if (super.nbrMoves == 0) {
                 return ((this.color == PlayerColor.WHITE) && ((y1 == y + 2) || y1 == y + 1)) ||
                        ((this.color == PlayerColor.BLACK) && ((y1 == y - 2) || (y1 == y - 1)));
@@ -48,23 +48,20 @@ public class Pawn extends Piece implements DiagonalMovement {
         return PieceType.PAWN;
     }
 
-
     private boolean canEat(Square from, Square to) {
-        return (check_bounds(to)                  &&
+        return (checkBounds(to)                  &&
                 abs(from.getY() - to.getY()) == 1 &&
                 isDiagonalMove(from, to)          &&
                 to.getPiece() != null);
     }
 
-    public boolean isEnPassant(Square from, Square to, Square pray) {
-        return (pray.getPiece() != null                                  &&
-                pray.getPiece().getNbrMoves() == 1                       &&
+    public boolean isEnPassant(Square from, Square to, Square prey) {
+        return (prey.getPiece() != null                                  &&
+                prey.getPiece().getNbrMoves() == 1                       &&
                 abs(from.getY() - to.getY()) == 1                        &&
                 isDiagonalMove(from, to)                                 &&
-                pray.getPiece().getType() == PieceType.PAWN              &&
-                pray.getPiece().getColor() != from.getPiece().getColor() &&
-                pray.didLongStep());
+                prey.getPiece().getType() == PieceType.PAWN              &&
+                prey.getPiece().getColor() != from.getPiece().getColor() &&
+                prey.didLongStep());
     }
-
-
 }

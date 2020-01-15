@@ -10,7 +10,7 @@ public interface DiagonalMovement extends Movement {
         int moveX = abs(from.getX() - to.getX());
         int moveY = abs(from.getY() - to.getY());
         if(moveX > 0 && moveY > 0)
-            return (check_bounds(to) && moveX == moveY);
+            return (checkBounds(to) && moveX == moveY);
         else return false;
     }
 

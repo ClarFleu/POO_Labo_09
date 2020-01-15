@@ -4,8 +4,8 @@ import chess.PieceType;
 import chess.PlayerColor;
 
 public abstract class Piece implements Movement {
-    PlayerColor color;
-    int nbrMoves;
+    private PlayerColor color;
+    private int nbrMoves;
 
     public Piece(PlayerColor color){
         this.color = color;

@@ -48,7 +48,7 @@ public class Square {
     public boolean didLongStep() {
         if(piece == null || piece.getType() != PieceType.PAWN)
             return false;
-        return (((piece.color == PlayerColor.WHITE) && y == 3 ) ||
-                ((piece.color == PlayerColor.BLACK) && y == 4));
+        return (((piece.getColor() == PlayerColor.WHITE) && y == 3 ) ||
+                ((piece.getColor() == PlayerColor.BLACK) && y == 4));
     }
 }

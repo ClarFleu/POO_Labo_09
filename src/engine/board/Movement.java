@@ -16,7 +16,7 @@ public interface Movement {
     /**
      * Check if the square that we intend to go to is in the board bounds
      */
-    default boolean check_bounds(Square square){
+    default boolean checkBounds(Square square){
         return (square.getX() < 8) && (square.getY() < 8);
     }
 }

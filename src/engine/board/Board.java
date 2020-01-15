@@ -176,7 +176,7 @@ public class Board {
 
         for (Square[] line : squares) {
             for (Square square : line) {
-                if(isChec(square, king)) {
+                if(canKill(square, king)) {
                     if(changePiece)
                         king.setPiece(null);
                     return true;
@@ -364,7 +364,7 @@ public class Board {
      * @param king (Square) possible destination of the given piece and position of the King
      * @return true if the king is in chack situation, false otherwise
      */
-    private boolean isChec(Square from, Square king) {
+    private boolean canKill(Square from, Square king) {
         //it there is nothing on the square...obvious
         if(from.getPiece() == null)
             return false;
