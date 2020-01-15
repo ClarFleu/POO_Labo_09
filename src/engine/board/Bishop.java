@@ -22,6 +22,12 @@ public class Bishop extends Piece implements DiagonalMovement{
     }
 
     @Override
+    public boolean hasObstacle(Square[] path) {
+        //TODO checker la présence d'obstacle
+        return false;
+    }
+
+    @Override
     public PieceType getType() {
         return PieceType.BISHOP;
     }

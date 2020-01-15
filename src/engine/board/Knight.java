@@ -24,6 +24,11 @@ public class Knight extends Piece {
     }
 
     @Override
+    public boolean hasObstacle(Square[] path) {
+        return false;
+    }
+
+    @Override
     public PieceType getType() {
         return PieceType.KNIGHT;
     }

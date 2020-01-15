@@ -6,6 +6,7 @@ import chess.PieceType;
 import chess.PlayerColor;
 import engine.board.Board;
 import engine.board.Piece;
+import engine.board.Rook;
 import engine.board.Square;
 
 public class Game implements ChessController {
@@ -73,11 +74,11 @@ public class Game implements ChessController {
                 int[] rookPos = board.isRoque(fromX, fromY, toX, toY);
                 if (rookPos[0] != -1) {
                     if(rookPos[1] == 0) {
-                        movePiece(board.getSquares()[rookPos[0]][rookPos[1]].getPiece(),
+                        movePiece(new Rook(from.getColor()),
                                 rookPos[0], rookPos[1],
                                 (rookPos[0] == 0 ? 3 : 5), 0);
                     } else {
-                        movePiece(board.getSquares()[rookPos[0]][rookPos[1]].getPiece(),
+                        movePiece(new Rook(from.getColor()),
                                 rookPos[0], rookPos[1],
                                 (rookPos[0] == 0 ? 3 : 5), 7);
                     }

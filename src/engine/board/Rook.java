@@ -24,4 +24,9 @@ public class Rook extends Piece implements LinearMovement {
         return PieceType.ROOK;
     }
 
+    @Override
+    public boolean hasObstacle(Square[] path) {
+        // TODO checker la présence d'obstacle
+        return false;
+    }
 }

@@ -30,14 +30,14 @@ public class Board {
                sTo   = squares[toX][toY];
         Piece from   = sFrom.getPiece();
 
-        if (from != null && validMove(sFrom, sTo)) {
-            if(sTo.getPiece() != null && sFrom.getPiece().getColor() == sTo.getPiece().getColor())
-                return false;
-            else
-                movePiece(sFrom, sTo);
-            return true;
-        }
-        return false;
+        if (from == null            ||
+            !validMove(sFrom, sTo)  ||
+            sTo.getPiece() != null  ||
+            sFrom.getPiece().getColor() == sTo.getPiece().getColor())
+            return false;
+
+        movePiece(sFrom, sTo);
+        return true;
     }
 
     /**
@@ -157,7 +157,7 @@ public class Board {
                 rookPos[1] = -1;
                 return rookPos;
             }
-            movePiece(king, rookEndPos);
+            movePiece(rook, rookEndPos);
             movePiece(king, squares[toX][toY]);
         }
 
