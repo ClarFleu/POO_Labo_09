@@ -49,4 +49,8 @@ public abstract class Piece implements Movement {
      */
     public abstract PieceType getType();
 
+    public boolean hasCheckmateTheKing(Square from, Square king){
+       return isAValidMove(from, king);
+    }
+
 }

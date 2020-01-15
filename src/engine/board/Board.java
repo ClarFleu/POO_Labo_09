@@ -347,24 +347,15 @@ public class Board {
      */
     private boolean isChec(Square from, Square king) {
         // TODO tout re-faire /!\
-        // You can't eat your own king
+        //it there is nothing on the square...obvious
         if(from.getPiece() == null)
             return false;
-        if (from.getPiece().getColor() == king.getPiece().getColor())
+        // You can't eat your own king
+        else if (from.getPiece().getColor() == king.getPiece().getColor())
             return false;
-
         // if a piece from the other color can reach the place the king wants to move to
         // the move is not valid
-        if ((from.getPiece().getType() == PieceType.QUEEN ||
-                from.getPiece().getType() == PieceType.BISHOP ||
-                from.getPiece().getType() == PieceType.ROOK) &&
-                !hasObstacle(from, king)) {
-            return false;
-        }
-        if (from.getPiece().getType() != PieceType.PAWN && from.getPiece().isAValidMove(from, king)) {
-            return false;
-        }
-        return false;
+        else return from.getPiece().hasCheckmateTheKing(from, king);
     }
 
     /**

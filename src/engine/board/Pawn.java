@@ -48,6 +48,7 @@ public class Pawn extends Piece implements DiagonalMovement {
         return PieceType.PAWN;
     }
 
+
     private boolean canEat(Square from, Square to) {
         return (check_bounds(to)                  &&
                 abs(from.getY() - to.getY()) == 1 &&

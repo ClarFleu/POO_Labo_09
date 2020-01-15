@@ -13,4 +13,5 @@ public interface DiagonalMovement extends Movement {
             return (check_bounds(to) && moveX == moveY);
         else return false;
     }
+
 }
