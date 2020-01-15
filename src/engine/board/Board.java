@@ -124,32 +124,32 @@ public class Board {
     public int[] isRoque(int fromX, int fromY, int toX, int toY) {
         Square king = squares[fromX][fromY];
         int[] rookPos = {-1, -1};
-        if(abs(toX - fromX) == 2 && (toY - fromY == 0) && king.getPiece().getNbrMoves() == 0) {
+        if (abs(toX - fromX) == 2 &&
+            (toY - fromY == 0) &&
+            king.getPiece().getNbrMoves() == 0) {
             Square rook;
             Square rookEndPos;
             if(toX < fromX) {
+                rookPos[0] = 0;
                 if(king.getPiece().getColor() == PlayerColor.WHITE) {
                     rook = squares[0][0];
-                    rookPos[0] = 0;
                     rookPos[1] = 0;
                     rookEndPos = squares[3][0];
                 } else {
                     rook = squares[0][7];
-                    rookPos[0] = 0;
                     rookPos[1] = 7;
-                    rookEndPos = squares[2][7];
+                    rookEndPos = squares[3][7];
                 }
             } else {
+                rookPos[0] = 7;
                 if (king.getPiece().getColor() == PlayerColor.WHITE) {
                     rook = squares[7][0];
-                    rookPos[0] = 7;
                     rookPos[1] = 0;
                     rookEndPos = squares[5][0];
                 } else {
                     rook = squares[7][7];
-                    rookPos[0] = 7;
                     rookPos[1] = 7;
-                    rookEndPos = squares[4][7];
+                    rookEndPos = squares[5][7];
                 }
             }
             if(rook.getPiece() == null || rook.getPiece().getNbrMoves() != 0 || hasObstacle(rook, king)) {
@@ -230,13 +230,13 @@ public class Board {
         } else if (pieceType != PieceType.KING)
             return from.getPiece().isAValidMove(from, to);
         else {
-            to.setPiece(from.getPiece());
+            //to.setPiece(from.getPiece());
             for (Square[] line : squares) {
                 for (Square square : line) {
-                    if(isChec(square, to)) {
+                    //if(isChec(square, to)) {
                         // TODO faire le test de la mise en echec
-                        return false;
-                    }
+                        //return false;
+                    //}
                 }
             }
             return (from.getPiece().isAValidMove(from, to));
