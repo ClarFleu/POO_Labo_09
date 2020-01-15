@@ -22,12 +22,12 @@ public class Pawn extends Piece implements DiagonalMovement {
         int x1 = to.getX();
         int y1 = to.getY();
         if (checkBounds(to) && (x1 == x) && to.getPiece() == null) {
-            if (super.nbrMoves == 0) {
-                return ((this.color == PlayerColor.WHITE) && ((y1 == y + 2) || y1 == y + 1)) ||
-                       ((this.color == PlayerColor.BLACK) && ((y1 == y - 2) || (y1 == y - 1)));
+            if (super.getNbrMoves() == 0) {
+                return ((getColor() == PlayerColor.WHITE) && ((y1 == y + 2) || y1 == y + 1)) ||
+                       ((getColor() == PlayerColor.BLACK) && ((y1 == y - 2) || (y1 == y - 1)));
             } else {
-                return ((this.color == PlayerColor.WHITE) && (y1 == y + 1)) ||
-                       ((this.color == PlayerColor.BLACK) && ((y1 == y - 1)));
+                return ((getColor() == PlayerColor.WHITE) && (y1 == y + 1)) ||
+                       ((getColor() == PlayerColor.BLACK) && ((y1 == y - 1)));
             }
         } else
             return canEat(from, to);
