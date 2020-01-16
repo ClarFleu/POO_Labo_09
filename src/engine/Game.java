@@ -35,7 +35,6 @@ public class Game implements ChessController {
         // Check that the right piece is being moved (the black player can't move a white pawn)
         // And change turns for the next move
         if (turnChange(from)) {
-
             if(from.getType() != PieceType.KING) {
                 // do the move
                 Piece tmp = board.getSquares()[toX][toY].getPiece();
@@ -44,10 +43,9 @@ public class Game implements ChessController {
                 // Check if the move will let the player in check state
                 if (board.isInCheck(player1.isTurn() ? player2.getKing() : player1.getKing(),
                         from.getColor())) {
-                    System.out.println(  " -- > " + (player1.isTurn() ? player2.getKing() : player1.getKing()).getPiece().getColor());
                     player1.changeTurn();
                     player2.changeTurn();
-                    System.out.println("Oups tour du joueur blanc ? " + player1.isTurn());
+
                     // undo the move
                     board.getSquares()[fromX][fromY].setPiece(from);
                     board.getSquares()[toX][toY].setPiece(tmp);
@@ -58,43 +56,29 @@ public class Game implements ChessController {
                 board.getSquares()[toX][toY].setPiece(tmp);
             }
 
+            int[] rookPos = board.isRoque(fromX, fromY, toX, toY);
+            int[] passPos = board.isEnPassant(fromX, fromY, toX, toY);
             // If the piece to be moved is a Pawn
-            // the move can be a "Prise en passant"
-            // or the promotion of said Pawn
-            if (from.getType() == PieceType.PAWN) {
-                int[] passPos = board.isEnPassant(fromX, fromY, toX, toY);
-
-                // Prise en passant
-                if(passPos[0] >= 0 && passPos[1] >= 0) {
-                    view.removePiece(passPos[0], passPos[1]);
-                    movePiece(from, fromX, fromY, toX, toY);
-                    from.moved();
-
-                    if (board.isInCheck(player1.isTurn() ? player1.getKing() : player2.getKing(),
-                            (player1.isTurn() ? player1.getPlayerColor() : player2.getPlayerColor()))){
-                        view.displayMessage("Echec !");
-                    }
-                    return true;
-                }
-
-                // Pawn promotion
-                if(board.isPromotion(fromX, fromY, toX, toY)) {
-                    PieceChoice choices[] = {
-                            new PieceChoice(PieceType.BISHOP),
-                            new PieceChoice(PieceType.KNIGHT),
-                            new PieceChoice(PieceType.QUEEN),
-                            new PieceChoice(PieceType.ROOK)};
-                    PieceChoice choice = view.askUser(
-                            "Pawn promotion",
-                            "Your pawn can be promoted, what PieceType do you want it to evolve to?",
-                            choices);
-                    PlayerColor color = (player1.isTurn() ? player2.getPlayerColor() : player1.getPlayerColor());
+            // the move can be the promotion of said Pawn
+            if (passPos[0] < 0 && from.getType() == PieceType.PAWN && board.isPromotion(fromX, fromY, toX, toY)) {
+                PieceChoice choices[] = {
+                        new PieceChoice(PieceType.BISHOP),
+                        new PieceChoice(PieceType.KNIGHT),
+                        new PieceChoice(PieceType.QUEEN),
+                        new PieceChoice(PieceType.ROOK)};
+                PieceChoice choice = view.askUser(
+                        "Pawn promotion",
+                        "Your pawn can be promoted, what PieceType do you want it to evolve to?",
+                        choices);
+                if (choice != null) {
+                    PlayerColor color = (player1.isTurn() ? player2.
+                            getPlayerColor() : player1.getPlayerColor());
                     view.putPiece(choice.getType(), color, toX, toY);
                     board.doPromotion(toX, toY, choice.getType(), color);
                     view.removePiece(fromX, fromY);
 
-                    if (board.isInCheck(player1.isTurn() ? player1.getKing() : player2.getKing(),
-                            (player1.isTurn() ? player1.getPlayerColor() : player2.getPlayerColor()))){
+                    if (board.isInCheck((player1.isTurn() ? player1 : player2).getKing(),
+                            (player1.isTurn() ? player1 : player2).getPlayerColor())) {
                         view.displayMessage("Echec !");
                     }
                     return true;
@@ -104,7 +88,6 @@ public class Game implements ChessController {
             // If the piece to be moved is a King
             // the move can be a Roque (small or big)
             if(from.getType() == PieceType.KING) {
-                int[] rookPos = board.isRoque(fromX, fromY, toX, toY);
                 if (rookPos[0] != -1) {
                     if(rookPos[1] == 0) {
                         movePiece(new Rook(from.getColor()),
@@ -117,24 +100,29 @@ public class Game implements ChessController {
                     }
                     movePiece(from, fromX, fromY, toX, toY);
 
-                    if (board.isInCheck(player1.isTurn() ? player1.getKing() : player2.getKing(),
-                            (player1.isTurn() ? player1.getPlayerColor() : player2.getPlayerColor()))){
+                    if (board.isInCheck((player1.isTurn() ? player1 : player2).getKing(),
+                                        (player1.isTurn() ? player1 : player2).getPlayerColor())){
                         view.displayMessage("Echec !");
                     }
+                    setKing(board.getSquares()[toX][toY]);
                     return true;
                 }
-                setKing(board.getSquares()[toX][toY]);
             }
 
             // All other pieces or moves can be tested in the default method
-            if (board.isValid(fromX, fromY, toX, toY)) {
+            if (board.isValid(fromX, fromY, toX, toY) || passPos[0] >= 0) {
+                // King movement
                 if(from.getType() == PieceType.KING)
                     setKing(board.getSquares()[toX][toY]);
+                // Prise en passant
+                if(passPos[0] >= 0 && passPos[1] >= 0)
+                    view.removePiece(passPos[0], passPos[1]);
+
                 movePiece(from, fromX, fromY, toX, toY);
                 from.moved();
 
-                if (board.isInCheck(player1.isTurn() ? player1.getKing() : player2.getKing(),
-                        (player1.isTurn() ? player1.getPlayerColor() : player2.getPlayerColor()))){
+                if (board.isInCheck((player1.isTurn() ? player1 : player2).getKing(),
+                                    (player1.isTurn() ? player1 : player2).getPlayerColor())){
                     view.displayMessage("Echec !");
                 }
                 return true;
@@ -144,8 +132,8 @@ public class Game implements ChessController {
             player2.changeTurn();
         }
 
-        if (board.isInCheck(player1.isTurn() ? player1.getKing() : player2.getKing(),
-                (player1.isTurn() ? player1.getPlayerColor() : player2.getPlayerColor()))){
+        if (board.isInCheck((player1.isTurn() ? player1 : player2).getKing(),
+                            (player1.isTurn() ? player1 : player2).getPlayerColor())){
             view.displayMessage("Echec !");
         }
         return false;

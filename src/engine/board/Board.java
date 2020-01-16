@@ -34,7 +34,7 @@ public class Board {
             sTo == sFrom            ||
             !validMove(sFrom, sTo)  ||
             (sTo.getPiece() != null  &&
-            sFrom.getPiece().getColor() == sTo.getPiece().getColor()))
+            from.getColor() == sTo.getPiece().getColor()))
             return false;
 
         movePiece(sFrom, sTo);
@@ -169,7 +169,6 @@ public class Board {
         boolean changePiece = false;
 
         if(king.getPiece() == null) {
-            System.out.println("Piece changée");
             changePiece = true;
             king.setPiece(new King(color));
         }
@@ -249,10 +248,8 @@ public class Board {
     private boolean validMove(Square from, Square to) {
         PieceType pieceType = from.getPiece().getType();
 
-        if (from.getPiece().canBeBlocked()) {
+        if (pieceType != PieceType.KING)
             return from.getPiece().isAValidMove(from, to) && !hasObstacle(from, to);
-        } else if (pieceType != PieceType.KING)
-            return from.getPiece().isAValidMove(from, to);
         else {
             if(isInCheck(to, from.getPiece().getColor()))
                 return false;
@@ -276,14 +273,14 @@ public class Board {
         int cpt = 0;
         for (int x = minX; x <= maxX; ++x)
             for (int y = minY; y <= maxY; ++y)
-                if(!squares[x][y].isEmpty())
+                if(!(squares[x][y].isEmpty()))
                     ++cpt;
 
         Square path[] = new Square[cpt];
         cpt = 0;
         for (int x = minX; x <= maxX; ++x) {
             for (int y = minY; y <= maxY; ++y) {
-                if(!squares[x][y].isEmpty())
+                if(!(squares[x][y].isEmpty()))
                     path[cpt++] = squares[x][y];
             }
         }

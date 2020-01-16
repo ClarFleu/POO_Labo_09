@@ -20,15 +20,15 @@ public interface DiagonalMovement extends Movement {
             ++cpt;
             if(to.getX() > from.getX())
                 if (square != from && square != to &&
-                        square.getX() == from.getX() + cpt &&
-                        square.getY() == from.getY() + cpt &&
-                        !square.isEmpty())
+                    square.getX() == from.getX() + cpt &&
+                    square.getY() == from.getY() + cpt &&
+                    !square.isEmpty())
                     return true;
             else
                 if (square != from && square != to &&
-                        square.getX() == from.getX() - cpt &&
-                        square.getY() == from.getY() + cpt &&
-                        !square.isEmpty())
+                    square.getX() == from.getX() - cpt &&
+                    square.getY() == from.getY() + cpt &&
+                    !square.isEmpty())
                     return true;
         }
         return  false;

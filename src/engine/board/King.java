@@ -13,6 +13,8 @@ public class King extends Piece {
 
     @Override
     public boolean isAValidMove(Square from, Square to) {
+        if(to.getPiece() != null && to.getPiece().getColor() == getColor())
+            return false;
         double x = pow((double)(from.getX() - to.getX()) , 2);
         double y =  pow((double)(from.getY() - to.getY()) , 2);
         return (((sqrt(x + y) == 1)||sqrt(x + y) == sqrt(2)) && checkBounds(to));

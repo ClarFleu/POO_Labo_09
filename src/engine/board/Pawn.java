@@ -35,12 +35,12 @@ public class Pawn extends Piece implements DiagonalMovement, LinearMovement {
 
     @Override
     public boolean hasObstacle(Square[] path, int pathSize) {
-        return hasLObstacle(path, pathSize);
+        return (isLinearMove(path[0], path[pathSize-1]) && hasLObstacle(path, pathSize));
     }
 
     @Override
     public boolean canBeBlocked() {
-        return false;
+        return true;
     }
 
     @Override

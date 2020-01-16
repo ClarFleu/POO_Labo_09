@@ -15,18 +15,18 @@ public interface LinearMovement extends Movement {
         }
         Square  from = path[0],
                 to = path[pathSize-1];
+
         if(from.getY() == to.getY()) {
             for (Square square : path)
-                if (square.getPiece() != null &&
-                    square != from &&
-                    square != to)
+                if (!square.isEmpty() &&
+                    square.getY() == from.getY() &&
+                    square.getPiece() != null)
                     return true;
         } else if (from.getX() == to.getX()) {
             for (Square square : path)
-                if (square.getX() == from.getX() &&
-                    square.getPiece() != null &&
-                    square != from &&
-                    square != to)
+                if (!square.isEmpty() &&
+                    square.getX() == from.getX() &&
+                    square.getPiece() != null)
                     return true;
         }
         return false;
