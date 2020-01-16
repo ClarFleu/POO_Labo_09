@@ -5,7 +5,8 @@ import static java.lang.Math.abs;
 public interface LinearMovement extends Movement {
     /**
      * Checks if the movement has an obstacle
-     * @param path (Square[]) list of suqares between the beggining and the end of the mave
+     * @param path (Square[]) list of suqares between the beggining
+     *             and the end of the mave
      * @param pathSize
      * @return true if there is an obstacle, false otherwise
      */

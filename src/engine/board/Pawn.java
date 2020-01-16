@@ -13,7 +13,8 @@ public class Pawn extends Piece implements DiagonalMovement, LinearMovement {
     /**
      * Checks if the current pawn is iin position too be promoted
      * @param y (int) value y of the Pawn's position
-     * @return true if the pawn is at the top or the bottom of the board, false otherwise
+     * @return true if the pawn is at the top or the bottom of
+     * the board, false otherwise
      */
     public boolean isPromotion(int y) {
         return ((this.getColor() == PlayerColor.BLACK && y == 0) ||
@@ -28,8 +29,10 @@ public class Pawn extends Piece implements DiagonalMovement, LinearMovement {
         int y1 = to.getY();
         if (checkBounds(to) && (x1 == x) && to.getPiece() == null) {
             if (super.getNbrMoves() == 0) {
-                return ((getColor() == PlayerColor.WHITE) && ((y1 == y + 2) || y1 == y + 1)) ||
-                       ((getColor() == PlayerColor.BLACK) && ((y1 == y - 2) || (y1 == y - 1)));
+                return ((getColor() == PlayerColor.WHITE) &&
+                        ((y1 == y + 2) || y1 == y + 1)) ||
+                       ((getColor() == PlayerColor.BLACK) &&
+                           ((y1 == y - 2) || (y1 == y - 1)));
             } else {
                 return ((getColor() == PlayerColor.WHITE) && (y1 == y + 1)) ||
                        ((getColor() == PlayerColor.BLACK) && ((y1 == y - 1)));

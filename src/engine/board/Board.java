@@ -18,7 +18,8 @@ public class Board {
     }
 
     /**
-     * Checks if the move from the given position to the given final position is a valid move
+     * Checks if the move from the given position to the given
+     * final position is a valid move
      * @param fromX (int) value x of the origin position
      * @param fromY (int) value y of the origin position
      * @param toX (int) value x of the final position
@@ -42,7 +43,8 @@ public class Board {
     }
 
     /**
-     * Checks if the given movement is a promotion (when a Pawn reaches the end of the board)
+     * Checks if the given movement is a promotion
+     * (when a Pawn reaches the end of the board)
      * @param fromX (int) value x of the origin position
      * @param fromY (int) value y of the origin position
      * @param toX (int) value x of the final position
@@ -51,11 +53,14 @@ public class Board {
      */
     public boolean isPromotion(int fromX, int fromY, int toX, int toY) {
         Piece p = squares[fromX][fromY].getPiece();
-        return (p.getType() == PieceType.PAWN && ((Pawn)p).isPromotion(toY) && isValid(fromX, fromY, toX, toY));
+        return (p.getType() == PieceType.PAWN &&
+                ((Pawn)p).isPromotion(toY) &&
+                isValid(fromX, fromY, toX, toY));
     }
 
     /**
-     * Does the promotion of a Pawn to a new Piece of the given type, and places it on the given position
+     * Does the promotion of a Pawn to a new
+     * Piece of the given type, and places it on the given position
      * @param x (int) value x of the position in which to place the new Piece
      * @param y (int) value y of the position in which to place the new Piece
      * @param type (PieceType) type of Piece to which the Pawn is to be promoted
@@ -85,7 +90,9 @@ public class Board {
      * @param fromY (int) value y of the origin position
      * @param toX (int) value x of the final position
      * @param toY (int) value y of the final position
-     * @return prayPos (int[]) the position of the Pawn that falls victim from the move if it is a "Prise en passant"
+     * @return prayPos (int[])
+     * the position of the Pawn that falls
+     * victim from the move if it is a "Prise en passant"
      *                 {-1, -1} otherwise
      */
     public int[] isEnPassant(int fromX, int fromY, int toX, int toY) {
@@ -112,13 +119,15 @@ public class Board {
     }
 
     /**
-     * Checks if the move from the given origin to the given final position is a "Roque" move
+     * Checks if the move from the given origin to the given final
+     * position is a "Roque" move
      * and finds the Rook with which the move is to be donn
      * @param fromX (int) value x of the origin position
      * @param fromY (int) value y of the origin position
      * @param toX (int) value x of the final position
      * @param toY (int) value y of the final position
-     * @return prayPos (int[]) the position of the Rook with which the King will change position
+     * @return prayPos (int[]) the position of the Rook with
+     * which the King will change position
      *                 if it is a "Roque" move
      *                 {-1, -1} otherwise
      */
@@ -153,7 +162,9 @@ public class Board {
                     rookEndPos = squares[5][7];
                 }
             }
-            if(rook.getPiece() == null || rook.getPiece().getNbrMoves() != 0 || hasObstacle(rook, king)) {
+            if(rook.getPiece() == null ||
+                rook.getPiece().getNbrMoves() != 0 ||
+                hasObstacle(rook, king)) {
                 rookPos[0] = -1;
                 rookPos[1] = -1;
                 return rookPos;
@@ -166,7 +177,8 @@ public class Board {
     }
 
     /**
-     * Checks if the a king of a the given color is in a check situation if in the given Square (position)
+     * Checks if the a king of a the given color is in a
+     * check situation if in the given Square (position)
      * @param king (Square) position in which to test the check situation for the king
      * @param color (PlayerColor) color of the king to check
      * @return true if the king would be in a check situation, false otherwise
@@ -197,7 +209,8 @@ public class Board {
      * Getter *
      **********/
     /**
-     * Getter for the variable squares of the board, which is a list of positions and Pieces
+     * Getter for the variable squares of the board,
+     * which is a list of positions and Pieces
      * @return squares (Square[][]) the list giving the actual status of the board game
      */
     public Square[][] getSquares() {
@@ -294,9 +307,11 @@ public class Board {
     }
 
     /**
-     * Checks if the given Piece position can move to the given king putting it in a check situation
+     * Checks if the given Piece position can move to the given
+     * king putting it in a check situation
      * @param from (Square) origin of the move
-     * @param king (Square) possible destination of the given piece and position of the King
+     * @param king (Square) possible destination of the given
+     *             piece and position of the King
      * @return true if the king is in chack situation, false otherwise
      */
     private boolean canKill(Square from, Square king) {
@@ -306,13 +321,16 @@ public class Board {
         // You can't eat your own king
         else if (from.getPiece().getColor() == king.getPiece().getColor())
             return false;
-        // if a piece from the other color can reach the place the king wants to move to
+        // if a piece from the other color can reach the place the
+        // king wants to move to
         // the move is not valid
-        else return from.getPiece().hasCheckmateTheKing(from, king) && !hasObstacle(from, king);
+        else return from.getPiece().hasCheckmateTheKing(from, king) &&
+                    !hasObstacle(from, king);
     }
 
     /**
-     * Checks if the Board is in a check mate situation, meaning, one of the king is stuck
+     * Checks if the Board is in a check mate situation,
+     * meaning, one of the king is stuck
      * @return
      */
     private boolean isCheckMate() {
