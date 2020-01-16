@@ -14,11 +14,6 @@ public class Queen extends Piece implements LinearMovement, DiagonalMovement{
     }
 
     @Override
-    public boolean canBeBlocked() {
-        return true;
-    }
-
-    @Override
     public PieceType getType() {
         return PieceType.QUEEN;
     }

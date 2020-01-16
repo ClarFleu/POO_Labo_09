@@ -36,6 +36,9 @@ public interface DiagonalMovement extends Movement {
 
     /**
      * Check if the move intended by the player is diagonal
+     * @param from (Square) origin of the move
+     * @param to (Square) destination of the move
+     * @return true if the move is in diagonal, false otherwise
      */
     default boolean isDiagonalMove(Square from, Square to) {
         int moveX = abs(from.getX() - to.getX());
@@ -44,5 +47,4 @@ public interface DiagonalMovement extends Movement {
             return (checkBounds(to) && moveX == moveY);
         else return false;
     }
-
 }

@@ -34,17 +34,26 @@ public class Square {
         return y;
     }
 
+    /**
+     * Get the piece in the square
+     * @return piece (Piece)
+     */
     public Piece getPiece(){
         return piece;
     }
 
     /**
      * Place the piece in the current square
+     * @param piece (Piece) piece to place on the square
      */
     public void setPiece(Piece piece){
         this.piece = piece;
     }
 
+    /**
+     * Checks if there is a Pawn that did a long step on the square
+     * @return true if ther is, false otherwise
+     */
     public boolean didLongStep() {
         if(piece == null || piece.getType() != PieceType.PAWN)
             return false;

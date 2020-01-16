@@ -10,6 +10,10 @@ public class PieceChoice implements ChessView.UserChoice {
         this.type = type;
     }
 
+    /**
+     * Get the type of the piece choice
+     * @return type (PieceType) type of the piece choice
+     */
     public PieceType getType() {
         return type;
     }

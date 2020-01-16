@@ -15,11 +15,6 @@ public class Bishop extends Piece implements DiagonalMovement{
     }
 
     @Override
-    public boolean canBeBlocked() {
-        return true;
-    }
-
-    @Override
     public boolean hasObstacle(Square[] path, int pathSize) {
         return hasDObstacle(path, pathSize);
     }

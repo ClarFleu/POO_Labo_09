@@ -14,28 +14,39 @@ public class Player {
     }
 
     /**
-     *Retourne la couleur du joueur
+     * Get the player's color
+     * @return color (PlayerColor)
      */
     PlayerColor getPlayerColor(){
         return color;
     }
 
+    /**
+     * Get the position of the player's king
+     * @return king (Square)
+     */
     Square getKing() {
         return king;
     }
 
+    /**
+     * Sets the player's king to the given king position
+     * @param king (Square) position of the player's king
+     */
     public void setKing(Square king) {
         this.king = king;
     }
+
     /**
-     * Active ou desactive le tour du joueur courant
+     * Changes the turn of the player
      */
     void changeTurn(){
         this.turn = !turn;
     }
 
     /**
-     * Retourne si c'est au tour du joueur de jouer
+     * Checks if this player is the current player
+     * @return true if it is this player's turn, false otherwise
      */
     boolean isTurn(){
         return turn;

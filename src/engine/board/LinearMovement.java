@@ -34,6 +34,9 @@ public interface LinearMovement extends Movement {
 
     /**
      * Check if the move intended by the player is horizontal or vertical
+     * @param from (Square) origin of the move
+     * @param to (Square) destination of the move
+     * @return true if the move is linear, false otherwise
      */
     default boolean isLinearMove(Square from, Square to){
         int moveX = abs(from.getX() - to.getX());

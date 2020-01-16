@@ -15,11 +15,6 @@ public class Rook extends Piece implements LinearMovement {
     }
 
     @Override
-    public boolean canBeBlocked() {
-        return true;
-    }
-
-    @Override
     public PieceType getType() {
         return PieceType.ROOK;
     }

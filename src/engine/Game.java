@@ -152,6 +152,9 @@ public class Game implements ChessController {
     /*******************
      * Private methods *
      *******************/
+    /**
+     * Initialize the view in the state of the board
+     */
     private void initView() {
         for (Square[] squares : board.getSquares()) {
             for (Square square: squares) {
@@ -167,6 +170,11 @@ public class Game implements ChessController {
         }
     }
 
+    /**
+     * Checks if the player moved one of his Pieces and changes the current player
+     * @param piece (Piece) piece moved by the current player
+     * @return true if it is the right piece false otherwise
+     */
     private boolean turnChange(Piece piece) {
         if (player1.isTurn()) {
             if (piece.getColor() != player1.getPlayerColor())
@@ -180,6 +188,10 @@ public class Game implements ChessController {
         return true;
     }
 
+    /**
+     * Sets the given king for the right player
+     * @param king (King)
+     */
     private void setKing(Square king) {
         if(king.getPiece() == null || king.getPiece().getType() != PieceType.KING)
             return;
@@ -189,6 +201,14 @@ public class Game implements ChessController {
             player2.setKing(king);
     }
 
+    /**
+     * Makes the given move on the view
+     * @param p (Piece) piece to move
+     * @param fromX (int) x value of the origin of the move
+     * @param fromY (int) y value of the origin of the move
+     * @param toX (int) x value of the destination of the move
+     * @param toY (int) y value of the destination of the move
+     */
     private void movePiece(Piece p, int fromX, int fromY, int toX, int toY ) {
         view.removePiece(fromX, fromY);
         view.putPiece(p.getType(), p.getColor(), toX, toY);

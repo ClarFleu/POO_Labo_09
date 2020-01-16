@@ -10,6 +10,11 @@ public class Pawn extends Piece implements DiagonalMovement, LinearMovement {
         super(color);
     }
 
+    /**
+     * Checks if the current pawn is iin position too be promoted
+     * @param y (int) value y of the Pawn's position
+     * @return true if the pawn is at the top or the bottom of the board, false otherwise
+     */
     public boolean isPromotion(int y) {
         return ((this.getColor() == PlayerColor.BLACK && y == 0) ||
                 (this.getColor() == PlayerColor.WHITE && y == 7));
@@ -39,15 +44,16 @@ public class Pawn extends Piece implements DiagonalMovement, LinearMovement {
     }
 
     @Override
-    public boolean canBeBlocked() {
-        return true;
-    }
-
-    @Override
     public PieceType getType() {
         return PieceType.PAWN;
     }
 
+    /**
+     * Checks if the given move can allow the Pawn to eat
+     * @param from (Square) origin of the move
+     * @param to (Square) destination of the move
+     * @return true if the pawn eats a Piece, false otherwise
+     */
     private boolean canEat(Square from, Square to) {
         return (checkBounds(to)                  &&
                 abs(from.getY() - to.getY()) == 1 &&
@@ -55,6 +61,13 @@ public class Pawn extends Piece implements DiagonalMovement, LinearMovement {
                 to.getPiece() != null);
     }
 
+    /**
+     * Checks if the given move is a "Prise en passant"
+     * @param from (Square) origin of the move
+     * @param to (Square) destination of the move
+     * @param prey (Square) position of the possible pray of the move
+     * @return true if the move is a "Prise en passant", false otherwise
+     */
     public boolean isEnPassant(Square from, Square to, Square prey) {
         return (prey.getPiece() != null                                  &&
                 prey.getPiece().getNbrMoves() == 1                       &&

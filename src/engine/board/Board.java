@@ -165,6 +165,12 @@ public class Board {
         return rookPos;
     }
 
+    /**
+     * Checks if the a king of a the given color is in a check situation if in the given Square (position)
+     * @param king (Square) position in which to test the check situation for the king
+     * @param color (PlayerColor) color of the king to check
+     * @return true if the king would be in a check situation, false otherwise
+     */
     public boolean isInCheck(Square king, PlayerColor color) {
         boolean changePiece = false;
 
@@ -302,14 +308,14 @@ public class Board {
             return false;
         // if a piece from the other color can reach the place the king wants to move to
         // the move is not valid
-        else return from.getPiece().hasCheckmateTheKing(from, king);
+        else return from.getPiece().hasCheckmateTheKing(from, king) && !hasObstacle(from, king);
     }
 
     /**
      * Checks if the Board is in a check mate situation, meaning, one of the king is stuck
      * @return
      */
-    private boolean isChecMate() {
+    private boolean isCheckMate() {
         return false;
     }
 }
